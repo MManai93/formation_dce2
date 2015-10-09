@@ -14,8 +14,10 @@ class ConnexionController extends BackController
     {
       $login = $request->postData('login');
       $password = $request->postData('password');
- 
-      if ($login == $this->app->config()->get('login') && $password == $this->app->config()->get('pass'))
+      $identifiants=$this->managers->getManagerOf('Connexion')->getIds(1);
+
+
+      if ($login ==$identifiants['login']  && $password == $identifiants['password'] )
       {
         $this->app->user()->setAuthenticated(true);
         $this->app->httpResponse()->redirect('.');

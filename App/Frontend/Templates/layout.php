@@ -24,7 +24,10 @@
           <li><a href="/admin/">Admin</a></li>
           <li><a href="/admin/news-insert.html">Ajouter une news</a></li>
           <li><a href="/admin/deconnexion.html">Déconnexion</a></li>
-          <?php } ?>
+          <?php } else {?>
+          <li><a href="/inscription.html">Inscription</a></li>
+          <li><a href="/connexion.html">Connexion</a></li>
+          <?php }?>
 
         </ul>
       </nav>
