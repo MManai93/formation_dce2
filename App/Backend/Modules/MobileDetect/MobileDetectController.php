@@ -3,7 +3,10 @@ namespace App\Backend\Modules\MobileDetect;
  
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
- 
+use \vendors\mobiledetect\mobiledetectlib\Mobile_Detect;
+
+require_once 'Mobile_Detect.php';
+
 class MobileDetectController extends BackController
 {
   public function executeIndex(HTTPRequest $request)
@@ -18,7 +21,10 @@ class MobileDetectController extends BackController
     {
       //...
     }
-    else{}
+    else{
+
+    }
+
     $this->page->addVar('Propriétés', $md->getProperties());
 
   }

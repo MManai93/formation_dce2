@@ -45,6 +45,7 @@ class CommentsManagerPDO extends CommentsManager
  
     foreach ($comments as $comment)
     {
+      date_default_timezone_set('Europe/Paris');
       $comment->setDate(new \DateTime($comment->date()));
     }
  

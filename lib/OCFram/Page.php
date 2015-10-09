@@ -25,7 +25,7 @@ class Page extends ApplicationComponent
  
     $user = $this->app->user();
  
-    extract($this->vars);
+    extract($this->vars);//Create array containing variables and their values
  
     ob_start();
       require $this->contentFile;

@@ -16,16 +16,13 @@ $appLoader->register();
  
 $modelLoader = new SplClassLoader('Model', __DIR__.'/../lib/vendors');
 $modelLoader->register();
- 
+
 $entityLoader = new SplClassLoader('Entity', __DIR__.'/../lib/vendors');
 $entityLoader->register();
  
 $formBuilderLoader = new SplClassLoader('FormBuilder', __DIR__.'/../lib/vendors');
 $formBuilderLoader->register();
 
-$mobileDetectLoader = new SplClassLoader('mobiledetect/mobiledetectlib', __DIR__.'/../lib/vendors');
-$mobileDetectLoader->register();
- 
 // Il ne nous suffit plus qu'à déduire le nom de la classe et de l'instancier
 $appClass = 'App\\'.$_GET['app'].'\\'.$_GET['app'].'Application';
  

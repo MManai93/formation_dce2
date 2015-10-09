@@ -1,0 +1,12 @@
+{
+    "name": "mobiledetect/composer",
+    "require": {
+        "mobiledetect/mobiledetectlib": "^2.8"
+    },
+    "authors": [
+        {
+            "name": "Marwan Manai",
+            "email": "m.manai@dreamcentury.com"
+        }
+    ]
+}

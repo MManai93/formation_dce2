@@ -23,7 +23,7 @@ abstract class BackController extends ApplicationComponent
  
   public function execute()
   {
-    $method = 'execute'.ucfirst($this->action);
+    $method = 'execute'.ucfirst($this->action);//ucfirst — Met le premier caractère en majuscule
  
     if (!is_callable([$this, $method]))
     {

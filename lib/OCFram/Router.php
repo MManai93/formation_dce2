@@ -3,6 +3,7 @@ namespace OCFram;
  
 class Router
 {
+  /** @var Route[] $routes */
   protected $routes = [];
  
   const NO_ROUTE = 1;
