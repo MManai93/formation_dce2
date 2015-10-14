@@ -21,20 +21,38 @@ class NewsController extends BackController
     }
     else
     {
-      $this->managers->getManagerOf('News')->delete($newsId);
-      $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
-      $this->app->user()->setFlash('La news a bien été supprimée !');
-      $this->app->httpResponse()->redirect('.');
+      if($this->app->user()->getAttribute('groupe_user')==1 || ($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')==$news->member_id()))
+      {
+        $this->managers->getManagerOf('News')->delete($newsId);
+        $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
+        $this->app->user()->setFlash('La news a bien été supprimée !');
+        $this->app->httpResponse()->redirect('/');
+      }
+      else
+      {
+        $this->app->user()->setFlash('Erreur : Vous n\'etes pas l\'auteur de la news !');
+        $this->app->httpResponse()->redirect('/');
+      }
     }
   }
  
   public function executeDeleteComment(HTTPRequest $request)
   {
-    $this->managers->getManagerOf('Comments')->delete($request->getData('id'));
- 
-    $this->app->user()->setFlash('Le commentaire a bien été supprimé !');
- 
-    $this->app->httpResponse()->redirect('.');
+    $comment=$this->managers->getManagerOf('Comments')->get($request->getData('id'));
+    $news=$this->managers->getManagerOf('Comments')->getNews($request->getData('id'));
+    if($this->app->user()->getAttribute('groupe_user')==1 || ($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')==$comment->member_id()))
+    {
+      $this->managers->getManagerOf('Comments')->delete($request->getData('id'));
+      $this->app->user()->setFlash('Le commentaire a bien été supprimé !');
+      $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');
+    }
+
+    else
+    {
+      $this->app->user()->setFlash('Erreur : Vous n\'etes pas l\'auteur du commentaire !');
+      $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');
+    }
+
   }
  
   public function executeIndex(HTTPRequest $request)
@@ -49,16 +67,30 @@ class NewsController extends BackController
  
   public function executeInsert(HTTPRequest $request)
   {
-    $this->processForm($request);
- 
-    $this->page->addVar('title', 'Ajout d\'une news');
+    if($this->app->user()->isAuthenticated())
+    {
+      $this->processForm($request);
+      $this->page->addVar('title', 'Ajout d\'une news');
+    }
+    else
+    {
+      $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
+      $this->app->httpResponse()->redirect('/');
+    }
   }
  
   public function executeUpdate(HTTPRequest $request)
   {
-    $this->processForm($request);
- 
-    $this->page->addVar('title', 'Modification d\'une news');
+    if($this->app->user()->isAuthenticated())
+    {
+      $this->processForm($request);
+      $this->page->addVar('title', 'Modification d\'une news');
+    }
+    else
+    {
+      $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
+      $this->app->httpResponse()->redirect('/');
+    }
   }
  
   public function executeUpdateComment(HTTPRequest $request)
@@ -69,8 +101,10 @@ class NewsController extends BackController
     {
       $comment = new Comment([
         'id' => $request->getData('id'),
-        'auteur' => $request->postData('auteur'),
-        'contenu' => $request->postData('contenu')
+        'member_login' => $this->app->user()->getAttribute('login_user'),
+        'content' => $request->postData('content'),
+        'member_id' =>$this->app->user()->getAttribute('id_user'),
+        'member_email' => $this->app->user()->getAttribute('email_user')
       ]);
     }
     else
@@ -78,6 +112,11 @@ class NewsController extends BackController
       if ($request->getExists('id'))
       {
         $comment = $this->managers->getManagerOf('Comments')->get($request->getData('id'));
+        if($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')!=$comment->member_id())
+        {
+          $this->app->user()->setFlash('Erreur : Vous n\'êtes pas l\'auteur de ce commentaire');
+          $this->app->httpResponse()->redirect('/');
+        }
       }
       else
       {
@@ -87,7 +126,7 @@ class NewsController extends BackController
     if($comment!=null)
     {
       $formBuilder = new CommentFormBuilder($comment);
-      $formBuilder->build();
+      $formBuilder->build(true,true);
 
       $form = $formBuilder->form();
 
@@ -96,8 +135,8 @@ class NewsController extends BackController
       if ($formHandler->process())
       {
         $this->app->user()->setFlash('Le commentaire a bien été modifié');
-
-        $this->app->httpResponse()->redirect('/admin/');
+        $news=$this->managers->getManagerOf('Comments')->getNews($request->getData('id'));
+        $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');
       }
 
       $this->page->addVar('form', $form->createView());
@@ -114,9 +153,11 @@ class NewsController extends BackController
     if ($request->method() == 'POST')
     {
       $news = new News([
-        'auteur' => $request->postData('auteur'),
-        'titre' => $request->postData('titre'),
-        'contenu' => $request->postData('contenu')
+        'member_id' => $this->app->user()->getAttribute('id_user'),
+        'member_login' => $this->app->user()->getAttribute('login_user'),
+        'title' => $request->postData('title'),
+        'content' => $request->postData('content'),
+        'tags' => $request->postData('tags')
       ]);
  
       if ($request->getExists('id'))
@@ -130,6 +171,12 @@ class NewsController extends BackController
       if ($request->getExists('id'))
       {
         $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
+
+        if($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')!=$news->member_id())
+        {
+          $this->app->user()->setFlash('Erreur : Vous n\'êtes pas l\'auteur de cette news');
+          $this->app->httpResponse()->redirect('/');
+        }
       }
       else
       {
@@ -139,7 +186,7 @@ class NewsController extends BackController
     if ($news!=null)
     {
       $formBuilder = new NewsFormBuilder($news);
-      $formBuilder->build();
+      $formBuilder->build(true,true);
 
       $form = $formBuilder->form();
 

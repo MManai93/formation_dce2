@@ -1,6 +1,7 @@
 <?php
 namespace App\Frontend\Modules\News;
  
+use Model\NewsManager;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \Entity\Comment;
@@ -22,12 +23,13 @@ class NewsController extends BackController
 
     $listeNews = $manager->getList(0, $nombreNews);
 
+
     foreach ($listeNews as $news) {
-      if (strlen($news->contenu()) > $nombreCaracteres) {
-        $debut = substr($news->contenu(), 0, $nombreCaracteres);
+      if (strlen($news->content()) > $nombreCaracteres) {
+        $debut = substr($news->content(), 0, $nombreCaracteres);
         $debut = substr($debut, 0, strrpos($debut, ' ')) . '...';
 
-        $news->setContenu($debut);
+        $news->setContent($debut);
       }
     }
 
@@ -37,14 +39,27 @@ class NewsController extends BackController
 
   public function executeShow(HTTPRequest $request)
   {
-    $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
+    /** @var NewsManager $newsManager */
+    $newsManager=$this->managers->getManagerOf('News');
+    $news = $newsManager->getUnique($request->getData('id'));
 
     if (empty($news)) {
       $this->app->httpResponse()->redirect404();
     }
 
-    $this->page->addVar('title', $news->titre());
+    $listTags=$newsManager->getTagsof($news->id());
+    $stringTags='';
+    if (is_array($listTags))
+    {
+      foreach ($listTags as $tag)
+      {
+        $stringTags .= $tag[0] . '/';
+      }
+    }
+
+    $this->page->addVar('title', $news->title());
     $this->page->addVar('news', $news);
+    $this->page->addVar('stringTags',$stringTags);
     $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($news->id()));
   }
 
@@ -52,13 +67,29 @@ class NewsController extends BackController
   {
     // Si le formulaire a été envoyé.
     $comment=null;
+    $auth=$this->app->user()->isAuthenticated();
     if ($request->method() == 'POST')
     {
-      $comment = new Comment([
-          'news' => $request->getData('news'),
-          'auteur' => $request->postData('auteur'),
-          'contenu' => $request->postData('contenu')
-      ]);
+      if($auth)
+      {
+        $comment = new Comment([
+            'news_id' => $request->getData('news'),
+            'member_login' => $this->app->user()->getAttribute('login_user'),
+            'member_email' => $this->app->user()->getAttribute('email_user'),
+            'content' => $request->postData('content'),
+            'member_id' => $this->app->user()->getAttribute('id_user')
+        ]);
+
+      }
+      else
+      {
+        $comment = new Comment([
+            'news_id' => $request->getData('news'),
+            'ghost_author' => $request->postData('ghost_author'),
+            'content' => $request->postData('content'),
+            'ghost_email'=> $request->postData('ghost_email')
+        ]);
+      }
     }
     else
     {
@@ -75,8 +106,9 @@ class NewsController extends BackController
 
     if($comment!=null)
     {
+
       $formBuilder = new CommentFormBuilder($comment);
-      $formBuilder->build();
+      $formBuilder->build($auth,true);
 
       $form = $formBuilder->form();
 

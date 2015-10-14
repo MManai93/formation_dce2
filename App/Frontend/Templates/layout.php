@@ -14,15 +14,17 @@
     <div id="wrap">
       <header>
         <h1><a href="/">Mon super site</a></h1>
-        <p>Comment ça, il n'y a presque rien ?</p>
+        <p><?php if ($user->isAuthenticated()) {echo 'Connecté(e) en tant que ',$user->getAttribute('login_user');}?></p>
       </header>
  
       <nav>
         <ul>
           <li><a href="/">Accueil</a></li>
           <?php if ($user->isAuthenticated()) { ?>
-          <li><a href="/admin/">Admin</a></li>
+          <li><a href="/admin/">Afficher les news</a></li>
+          <li><a href="/admin/profil-list.html">Membres</a></li>
           <li><a href="/admin/news-insert.html">Ajouter une news</a></li>
+          <li><a href="/admin/profil-<?= $user->getAttribute('id_user')?>.html">Afficher mon profil</a></li>
           <li><a href="/admin/deconnexion.html">Déconnexion</a></li>
           <?php } else {?>
           <li><a href="/inscription.html">Inscription</a></li>

@@ -3,6 +3,7 @@ namespace OCFram;
  
 class FormHandler
 {
+  /** @var  Form $form */
   protected $form;
   protected $manager;
   protected $request;

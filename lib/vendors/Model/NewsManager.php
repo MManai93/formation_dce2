@@ -66,4 +66,10 @@ abstract class NewsManager extends Manager
    * @return void
    */
   abstract protected function modify(News $news);
+
+  /**
+   * @param $news
+   * @return mixed
+   */
+  abstract  public function getTagsOf($news);
 }
