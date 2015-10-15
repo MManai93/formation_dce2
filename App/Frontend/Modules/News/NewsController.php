@@ -141,47 +141,35 @@ class NewsController extends BackController
     $this->page->addVar('countNews', count($listNews));
   }
 
-  public function executeGetNewComments($newsId, $commentIdLast)
+  public function executeGetNewComments(HTTPRequest $request)
   {
-    $newsManager=$this->managers->getManagerOf('News');
-    $news = $newsManager->getUnique($newsId);
-
-    if (empty($news))
-    {
-      $this->app->httpResponse()->redirect404();
-    }
-    $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($newsId);
+    $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($request->postData('news_id'));
     $listCommentsAfterIdComment=[];
     foreach($listCommentsofNews as $comment)
     {
-      if($comment->id() > $commentIdLast)
+      if($comment->id() > $request->postData('comment_id_last'))
       {
         $listCommentsAfterIdComment[]=$comment;
       }
     }
-    $this->page->addVar('title',$news->title());
-    $this->page->addVar('listComment',$listCommentsAfterIdComment);
+    $listCommentsAfterIdComment=json_encode($listCommentsAfterIdComment);
+    echo $listCommentsAfterIdComment;
+    exit();
   }
 
-  public function executeGetOldComments($newsId, $commentIdOld)
+  public function executeGetOldComments(HTTPRequest $request)
   {
-    $newsManager=$this->managers->getManagerOf('News');
-    $news = $newsManager->getUnique($newsId);
-
-    if (empty($news))
-    {
-      $this->app->httpResponse()->redirect404();
-    }
-    $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($newsId);
+    $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($request->postData('news_id'));
     $listCommentsBeforeIdComment=[];
     foreach($listCommentsofNews as $comment)
     {
-      if($comment->id() < $commentIdOld)
+      if($comment->id() < $request->postData('comment_id_old'))
       {
         $listCommentsBeforeIdComment[]=$comment;
       }
     }
-    $this->page->addVar('title',$news->title());
-    $this->page->addVar('listComment',$listCommentsBeforeIdComment);
+    $listCommentsBeforeIdComment=json_encode($listCommentsBeforeIdComment);
+    echo $listCommentsBeforeIdComment;
+    exit();
   }
 }

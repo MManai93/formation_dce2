@@ -41,7 +41,8 @@ class CommentsManagerPDO extends CommentsManager
     $q = $this->dao->prepare('SELECT NCC_id as id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif, NCC_fk_NMC as member_id, NMC_login as member_login, NMC_email as member_email
                               FROM t_new_commentc
                               LEFT OUTER JOIN t_new_memberc ON NCC_fk_NMC=NMC_id
-                              WHERE NCC_fk_NAC = :news');
+                              WHERE NCC_fk_NAC = :news
+                              ORDER BY NCC_id');
     $q->bindValue(':news', $news, \PDO::PARAM_INT);
     $q->execute();
  
@@ -61,7 +62,7 @@ class CommentsManagerPDO extends CommentsManager
   protected function modify(Comment $comment)
   {
     $q = $this->dao->prepare('UPDATE t_new_commentc
-                              SET NCC_fk_NMC = :member_id, NCC_content = :content
+                              SET NCC_fk_NMC = :member_id, NCC_content = :content, NCC_datemodif=NOW()
                               WHERE NCC_id = :id');
  
     $q->bindValue(':member_id', $comment->member_id(), \PDO::PARAM_INT);

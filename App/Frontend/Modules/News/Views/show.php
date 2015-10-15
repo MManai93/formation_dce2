@@ -19,9 +19,10 @@ if (empty($comments))
 {
 ?>
 <p>Aucun commentaire n'a encore été posté. Soyez le premier à en laisser un !</p>
+
 <?php
 }
- 
+
 foreach ($comments as $comment)
 {
 ?>
@@ -43,15 +44,18 @@ foreach ($comments as $comment)
 <?php
 }
 ?>
- 
 <p><a href="commenter-<?= $news->id() ?>.html">Ajouter un commentaire</a></p>
-
-<script>
-  function alerter()
-  {
-    alert("j'ai cliqué");
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+<script type="text/javascript">
+  function loadNewComments() {
+    var news=<?=$news->id()?>;
+    var comment=<?=$comments[count($comments)-1]->id()?>;
+    jQuery.post("getNewComments.html", {news_id: news, comment_id_last: comment},function(data){
+      $("p").append(data);
+    });
+    setTimeout(loadNewComments,5000);
   }
 </script>
-<form action="showTag" method="post">
-  <input type="submit" value="Clique moi" onclick="alerter()" />
-</form>
+
+<button onclick="loadNewComments()">Recharger</button>
+
