@@ -24,7 +24,7 @@ class MemberController extends BackController
         }
         else
         {
-            if($this->app->user()->getAttribute('groupe_user')==1 || ($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')==$Member->id()))
+            if(($this->app->user()->getAttribute('groupe_user') < $Member->groupe_id()) || ($this->app->user()->getAttribute('id_user')==$Member->id()))
             {
                 $this->page->addVar('idURL',$request->getData('id'));
                 if($this->app->user()->getAttribute('id_user')==$Member->id())
@@ -166,7 +166,7 @@ class MemberController extends BackController
 
         else
         {
-            if($this->app->user()->getAttribute('groupe_user')==1 || ($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')==$Member->id()))
+            if(($this->app->user()->getAttribute('groupe_user') < $Member->groupe_id()) || ($this->app->user()->getAttribute('id_user')==$Member->id()))
             {
                 $this->app->user()->getAttribute('groupe_user')==1 ? $admin=true : $admin=false;
                 $this->processForm($request,$Member,$admin);
@@ -200,16 +200,16 @@ class MemberController extends BackController
 
         else
         {
-            if($this->app->user()->getAttribute('groupe_user')==1 || ($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')==$Member->id()))
+            if(($this->app->user()->getAttribute('groupe_user') < $Member->groupe_id()) || ($this->app->user()->getAttribute('id_user')==$Member->id()))
             {
                 $this->page->addVar('title','Modification du login' );
                 $this->page->addVar('idURL',$request->getData('id'));
                 if ($request->postExists('newlogin'))
                 {
-                    $login = $this->app->user()->getAttribute('login_user');
+                    $login = $Member->login();
                     $password = sha1($request->postData('password'));
                     $managerConnexion=$this->managers->getManagerOf('Connexion');
-                    $identifiants=$managerConnexion->FindUser($login,$password,$this->app->user()->getAttribute('groupe_user'));
+                    $identifiants=$managerConnexion->FindUser($login,$password,$Member->groupe_id());
 
                     if($memberManager->FindUser($request->postExists('newlogin')))
                     {
@@ -219,7 +219,7 @@ class MemberController extends BackController
 
                     elseif ($identifiants)
                     {
-                        $memberManager->modifyLogin($request->postData('newlogin'),$this->app->user()->getAttribute('id_user'));
+                        $memberManager->modifyLogin($request->postData('newlogin'),$Member->groupe_id());
                         $this->app->user()->setAttribute('login_user',$request->postData('newlogin'));
                         $this->app->user()->setFlash('Votre login a bien été modifié !');
                         $this->app->httpResponse()->redirect('profil-'.$request->getData('id').'.html');
@@ -258,7 +258,7 @@ class MemberController extends BackController
 
         else
         {
-            if($this->app->user()->getAttribute('groupe_user')==1|| ($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')==$Member->id()))
+            if(($this->app->user()->getAttribute('groupe_user') < $Member->groupe_id()) || ($this->app->user()->getAttribute('id_user')==$Member->id()))
             {
                 $this->page->addVar('title','Modification du mot de passe' );
                 $this->page->addVar('idURL',$request->getData('id'));
@@ -267,10 +267,10 @@ class MemberController extends BackController
                     $login = $this->app->user()->getAttribute('login_user');
                     $password = sha1($request->postData('password'));
                     $manager=$this->managers->getManagerOf('Connexion');
-                    $identifiants=$manager->FindUser($login,$password,$this->app->user()->getAttribute('groupe_user'));
+                    $identifiants=$manager->FindUser($login,$password,$Member->groupe_id());
                     if ($identifiants)
                     {
-                        $memberManager->modifyPassword(sha1($request->postData('newpassword')),$this->app->user()->getAttribute('id_user'));
+                        $memberManager->modifyPassword(sha1($request->postData('newpassword')),$Member->id());
                         $this->app->user()->setFlash('Le mot de passe a bien été modifié !');
                         $this->app->httpResponse()->redirect('/admin/profil-'.$Member->id().'.html');
                     }

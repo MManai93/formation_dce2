@@ -64,4 +64,12 @@ abstract class CommentsManager extends Manager
    * @return Comment
    */
   abstract public function get($id);
+
+  abstract public function getNews($id);
+
+  abstract public function getGhostAuthor();
+
+  abstract public function getCommentGhostAuthor($ghostauthor);
+
+  abstract public function countCommentGhostAuthor($ghostauthor);
 }

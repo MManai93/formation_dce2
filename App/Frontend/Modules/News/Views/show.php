@@ -25,7 +25,7 @@ foreach ($comments as $comment)
       <?php } else { ?><a href="/admin/profil-<?=$comment->member_id()?>.html"><?=htmlspecialchars($comment->member_login())?><?php }   ?></a>
     </strong> le <?= $comment->dateAdd()->format('d/m/Y à H\hi') ?>
     <?php if ($comment->dateAdd() != $comment->dateModif()) { ?><small><em>Modifiée le <?= $comment->dateModif()->format('d/m/Y à H\hi') ?></em></small><?php }?>
-    <em><?php htmlspecialchars($comment->ghost_email() ? $comment->ghost_email() : $comment->member_email())?></em>
+    <em><?= $comment->ghost_email() ? htmlspecialchars($comment->ghost_email()) : htmlspecialchars($comment->member_email())?></em>
     <?php if ($user->isAuthenticated()) { if($user->getAttribute('groupe_user')==1 || ($user->getAttribute('groupe_user')==2 && $user->getAttribute('id_user')==$comment->member_id())) { ?> -
       <a href="admin/comment-update-<?= $comment->id() ?>.html">Modifier</a> |
       <a href="admin/comment-delete-<?= $comment->id() ?>.html">Supprimer</a>

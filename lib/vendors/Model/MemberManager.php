@@ -22,5 +22,27 @@ abstract class MemberManager extends Manager
         }
     }
 
+    abstract public function modifyLogin($login,$idMembre);
 
+    abstract public function modifyPassword($password,$idMembre);
+
+    abstract public function delete($idMembre);
+
+    abstract public function FindPassword($loginMembre);
+
+    abstract public function getListNews($idMembre);
+
+    abstract public function getListComments($idMembre);
+
+    abstract public function countNews($idMembre);
+
+    abstract public function countComments($idMembre);
+
+    abstract public function getListMember();
+
+    abstract public function count();
+
+    abstract protected function modify(Member $member);
+
+    abstract public function getUnique($idMembre);
 }

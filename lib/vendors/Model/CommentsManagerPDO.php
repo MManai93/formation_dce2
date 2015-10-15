@@ -37,7 +37,7 @@ class CommentsManagerPDO extends CommentsManager
       throw new \InvalidArgumentException('L\'identifiant de la news passé doit être un nombre entier valide');
     }
  
-    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif, NCC_fk_NMC as member_id, NMC_login as member_login, NMC_email as member_email FROM t_new_commentc INNER JOIN t_new_memberc ON NCC_fk_NMC=NMC_id WHERE NCC_fk_NAC = :news');
+    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif, NCC_fk_NMC as member_id, NMC_login as member_login, NMC_email as member_email FROM t_new_commentc LEFT OUTER JOIN t_new_memberc ON NCC_fk_NMC=NMC_id WHERE NCC_fk_NAC = :news');
     $q->bindValue(':news', $news, \PDO::PARAM_INT);
     $q->execute();
  
@@ -67,7 +67,7 @@ class CommentsManagerPDO extends CommentsManager
  
   public function get($id)
   {
-    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_fk_NAC as news_id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif, NCC_fk_NMC as member_id, NMC_login as member_login, NMC_email as member_email FROM t_new_commentc INNER JOIN t_new_memberc ON NCC_fk_NMC=NMC_id WHERE NCC_id = :id');
+    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_fk_NAC as news_id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif, NCC_fk_NMC as member_id, NMC_login as member_login, NMC_email as member_email FROM t_new_commentc LEFT OUTER JOIN t_new_memberc ON NCC_fk_NMC=NMC_id WHERE NCC_id = :id');
     $q->bindValue(':id', (int) $id, \PDO::PARAM_INT);
     $q->execute();
  
@@ -95,7 +95,7 @@ class CommentsManagerPDO extends CommentsManager
 
   public function getCommentGhostAuthor($ghostauthor)
   {
-    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_fk_NAC as news_id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif FROM t_new_commentc WHERE NCC_ghostauthor = :ghostauthor');
+    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_fk_NAC as news_id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif FROM t_new_commentc WHERE NCC_ghostauthor = :ghost_author');
     $q->bindValue(':ghost_author',$ghostauthor);
     $q->execute();
 
@@ -109,13 +109,14 @@ class CommentsManagerPDO extends CommentsManager
       $Comment->setDateAdd(new \DateTime($Comment->dateadd()));
       $Comment->setDateModif(new \DateTime($Comment->dateModif()));
     }
-    return $comments;;
+    return $listcomment;
 
   }
 
   public function countCommentGhostAuthor($ghostauthor)
   {
-    $q = $this->dao->query('SELECT COUNT(*) FROM t_new_commentc WHERE NCC_ghostauthor = :ghostauthor');
+    $q = $this->dao->prepare('SELECT COUNT(*) FROM t_new_commentc WHERE NCC_ghostauthor =:ghost_author');
+
     $q->bindValue(':ghost_author',$ghostauthor);
     $q->execute();
     return $q->fetchColumn();

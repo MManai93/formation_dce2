@@ -7,6 +7,7 @@ use \OCFram\TextField;
 use \OCFram\TagField;
 use \OCFram\MaxLengthValidator;
 use \OCFram\NotNullValidator;
+use \OCFram\NotNullTagsValidator;
 use \OCFram\MaxTagsValidator;
 
 class NewsFormBuilder extends FormBuilder
@@ -34,9 +35,9 @@ class NewsFormBuilder extends FormBuilder
         ->add(new TagField([
             'label' => 'Tags',
             'name' => 'tags',
-            'maxTags' => 15,
+            'maxLength' => 15,
             'validators' => [
-                new NotNullValidator('Merci de spécifier les tags associés à la news'),
+                new NotNullTagsValidator('Merci de spécifier les tags associés à la news'),
                 new MaxTagsValidator('Vous pouvez spécifier seulement 15 tags au maximum !',15),
             ],
         ]));

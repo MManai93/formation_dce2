@@ -9,6 +9,7 @@ use \OCFram\FormHandler;
 
 class RegistrationController extends BackController
 {
+    protected static $GROUPE_ID=2;
     public function executeIndex(HTTPRequest $request)
     {
         if ($request->method()=='POST')
@@ -17,7 +18,8 @@ class RegistrationController extends BackController
                 'login' => $request->postData('login'),
                 'password' => $request->postData('password'),
                 'passwordcheck' => $request->postData('passwordcheck'),
-                'email' => $request->postData('email')
+                'email' => $request->postData('email'),
+                'groupe_id' => self::$GROUPE_ID
             ]);
         }
         else

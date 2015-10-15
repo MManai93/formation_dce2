@@ -94,6 +94,25 @@ class NewsManagerPDO extends NewsManager
         $requete->bindValue(':id', $news->id(), \PDO::PARAM_INT);
 
         $requete->execute();
+
+        $tagsArray = $news->tags();
+
+        //destruction des anciens tags
+        $requete = $this->dao->prepare('DELETE t_new_keywordc, t_new_keywordd FROM t_new_keywordc INNER JOIN t_new_keywordd ON NKD_fk_NKC=NKC_id WHERE NKD_fk_NAC=:newsId');
+        $requete->bindValue(':newsId',$news->id());
+        //ajout des nouveaux tags
+        $tagsArray = $news->tags();
+
+        foreach ($tagsArray as $tag) {
+            $requete = $this->dao->prepare('INSERT INTO t_new_keywordc (NKC_word) VALUES (:tag)');
+            $requete->bindValue(':tag', $tag);
+            $requete->execute();
+            $idTag = (int)$this->dao->lastInsertId();
+            $requete = $this->dao->prepare('INSERT INTO t_new_keywordd (NKD_fk_NKC,NKD_fk_NAC) VALUES (:idTag,:newId)');
+            $requete->bindValue(':idTag', $idTag);
+            $requete->bindValue(':newId', $news->id());
+            $requete->execute();
+        }
     }
 
     public function getTagsOf($news)
@@ -103,6 +122,7 @@ class NewsManagerPDO extends NewsManager
         $requete->execute();
 
         return $requete->fetchAll();
+
     }
 
 }
