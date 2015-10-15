@@ -5,5 +5,6 @@
   <route url="/connexion.html" module="ConnexionMember" action="index" />
   <route url="/news-([0-9]+)\.html" module="News" action="show" vars="id"/>
   <route url="/commenter-([0-9]+)\.html" module="News" action="insertComment" vars="news" />
-  <route url="/profil-ghost-([a-z]+)\.html" module="GhostMember" action="index" vars="name" />
+  <route url="/profil-ghost-([a-z]+)\.html" module="GhostMember" action="show" vars="name" />
+  <route url="/tag-([a-z]+)\.html" module="News" action="showTag" vars="name" />
 </routes>

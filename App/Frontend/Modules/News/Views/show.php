@@ -6,7 +6,14 @@
   <p style="text-align: right;"><small><em>Modifiée le <?= $news->dateModif()->format('d/m/Y à H\hi') ?></em></small></p>
 <?php } ?>
 
-<p><strong>Tags : </strong><?=$stringTags?></p>
+<p><strong>Tags : </strong><?php
+  foreach ($listTags as $tag)
+  { ?>
+    <a href="tag-<?=$tag[0]?>.html"><?=$tag[0]?></a>/
+  <?php
+  }
+  ?>
+</p>
 <?php
 if (empty($comments))
 {
@@ -38,3 +45,13 @@ foreach ($comments as $comment)
 ?>
  
 <p><a href="commenter-<?= $news->id() ?>.html">Ajouter un commentaire</a></p>
+
+<script>
+  function alerter()
+  {
+    alert("j'ai cliqué");
+  }
+</script>
+<form action="showTag" method="post">
+  <input type="submit" value="Clique moi" onclick="alerter()" />
+</form>

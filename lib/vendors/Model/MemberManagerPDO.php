@@ -63,7 +63,11 @@ class MemberManagerPDO extends MemberManager
 
     public function getListNews($idMembre)
     {
-        $sql = 'SELECT NAC_title as title, NAC_content as content, NAC_dateadd as dateAdd, NAC_datemodif as dateModif, NAC_id as id FROM t_new_articlec INNER JOIN T_NEW_memberc ON NAC_fk_NMC=NMC_id WHERE NMC_id=:idMembre ORDER BY NAC_datemodif DESC';
+        $sql = 'SELECT NAC_title as title, NAC_content as content, NAC_dateadd as dateAdd, NAC_datemodif as dateModif, NAC_id as id
+                FROM t_new_articlec
+                INNER JOIN T_NEW_memberc ON NAC_fk_NMC=NMC_id
+                WHERE NMC_id=:idMembre
+                ORDER BY NAC_datemodif DESC';
         $requete = $this->dao->prepare($sql);
         $requete->bindValue(':idMembre',$idMembre);
 
@@ -85,7 +89,11 @@ class MemberManagerPDO extends MemberManager
 
     public function getListComments($idMembre)
     {
-        $sql = 'SELECT NCC_fk_NAC as news_id, NMC_login as member_login, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif FROM t_new_commentc INNER JOIN T_NEW_memberc ON NCC_fk_NMC=NMC_id WHERE NMC_id=:idMembre ORDER BY NCC_dateadd DESC';
+        $sql = 'SELECT NCC_fk_NAC as news_id, NMC_login as member_login, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif
+                FROM t_new_commentc
+                INNER JOIN T_NEW_memberc ON NCC_fk_NMC=NMC_id
+                WHERE NMC_id=:idMembre
+                ORDER BY NCC_dateadd DESC';
         $requete = $this->dao->prepare($sql);
         $requete->bindValue(':idMembre',$idMembre);
 
@@ -167,7 +175,9 @@ class MemberManagerPDO extends MemberManager
      */
     public function getUnique($idMembre)
     {
-        $requete = $this->dao->prepare('SELECT NMC_id as id, NMC_login as login, NMC_email as email, NMC_dateregistration as dateRegistration, NMC_birthday as birthday, NMC_adress as adress, NMC_city as city, NMC_country as country FROM T_NEW_memberc WHERE NMC_id = :idMembre');
+        $requete = $this->dao->prepare('SELECT NMC_id as id, NMC_login as login, NMC_email as email, NMC_dateregistration as dateRegistration, NMC_birthday as birthday, NMC_adress as adress, NMC_city as city, NMC_country as country
+                                        FROM T_NEW_memberc
+                                        WHERE NMC_id = :idMembre');
         $requete->bindValue(':idMembre', (int) $idMembre, \PDO::PARAM_INT);
 
 //        if ($membre = $requete->fetch())

@@ -48,18 +48,18 @@ class NewsController extends BackController
     }
 
     $listTags=$newsManager->getTagsof($news->id());
-    $stringTags='';
+    /*$stringTags='';
     if (is_array($listTags))
     {
       foreach ($listTags as $tag)
       {
-        $stringTags .= $tag[0] . '/';
+        $stringTags .= '<a href="tag-".$tag[0]></a>'. '/';
       }
-    }
+    }*/
 
     $this->page->addVar('title', $news->title());
     $this->page->addVar('news', $news);
-    $this->page->addVar('stringTags',$stringTags);
+    $this->page->addVar('listTags',$listTags);
     $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($news->id()));
   }
 
@@ -131,6 +131,16 @@ class NewsController extends BackController
     }
   }
 
+  public function executeShowTag(HTTPRequest $request)
+  {
+    $newsManager=$this->managers->getManagerOf('News');
+    $listNews=$newsManager->getNewsOf($request->getData('name'));
+    $this->page->addVar('title', 'Liste des news ayant pour tag'.$request->getData('name'));
+    $this->page->addVar('listNews', $listNews);
+    $this->page->addVar('TagName', $request->getData('name'));
+    $this->page->addVar('countNews', count($listNews));
+  }
+
   public function executeGetNewComments($newsId, $commentIdLast)
   {
     $newsManager=$this->managers->getManagerOf('News');
@@ -151,5 +161,27 @@ class NewsController extends BackController
     }
     $this->page->addVar('title',$news->title());
     $this->page->addVar('listComment',$listCommentsAfterIdComment);
+  }
+
+  public function executeGetOldComments($newsId, $commentIdOld)
+  {
+    $newsManager=$this->managers->getManagerOf('News');
+    $news = $newsManager->getUnique($newsId);
+
+    if (empty($news))
+    {
+      $this->app->httpResponse()->redirect404();
+    }
+    $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($newsId);
+    $listCommentsBeforeIdComment=[];
+    foreach($listCommentsofNews as $comment)
+    {
+      if($comment->id() < $commentIdOld)
+      {
+        $listCommentsBeforeIdComment[]=$comment;
+      }
+    }
+    $this->page->addVar('title',$news->title());
+    $this->page->addVar('listComment',$listCommentsBeforeIdComment);
   }
 }

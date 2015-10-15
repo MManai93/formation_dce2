@@ -6,7 +6,7 @@ use \OCFram\HTTPRequest;
 
 class GhostMemberController extends BackController
 {
-    public function executeIndex(HTTPRequest $request)
+    public function executeShow(HTTPRequest $request)
     {
         $commentManager=$this->managers->getManagerOf('Comments');
         $listComment=$commentManager->getCommentGhostAuthor($request->getData('name'));

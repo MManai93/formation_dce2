@@ -95,8 +95,6 @@ class NewsManagerPDO extends NewsManager
 
         $requete->execute();
 
-        $tagsArray = $news->tags();
-
         //destruction des anciens tags
         $requete = $this->dao->prepare('DELETE t_new_keywordc, t_new_keywordd FROM t_new_keywordc INNER JOIN t_new_keywordd ON NKD_fk_NKC=NKC_id WHERE NKD_fk_NAC=:newsId');
         $requete->bindValue(':newsId',$news->id());
@@ -122,7 +120,20 @@ class NewsManagerPDO extends NewsManager
         $requete->execute();
 
         return $requete->fetchAll();
+    }
 
+    public function getNewsOf($tags)
+    {
+        $requete=$this->dao->prepare('SELECT DISTINCT NAC_id as id, NAC_title as title, NMC_login as member_login
+                                      FROM t_new_keywordd
+                                      INNER JOIN t_new_articlec ON NAC_id=NKD_fk_NAC
+                                      INNER JOIN t_new_keywordc ON NKD_fk_NKC=NKC_id
+                                      INNER JOIN t_new_memberc ON NAC_fk_NMC=NMC_id
+                                      WHERE NKC_word=:word');
+        $requete->bindValue(':word',$tags);
+        $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\News');
+        $requete->execute();
+        return $requete->fetchAll();
     }
 
 }

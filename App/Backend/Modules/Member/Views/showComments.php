@@ -6,7 +6,7 @@
     date_default_timezone_set('Europe/Paris');
     foreach ($listeComment as $comment)
     {
-        echo '<tr><td>', $comment['contenu'], '</td><td>',$comment['date']->format('d/m/Y à H\hi'),'</td><td><a href="../news-', $comment['news'], '.html"><img src="/images/update.png" alt="Voir la news" /></a></td></tr>', "\n";
+        echo '<tr><td>', $comment->content(), '</td><td>',$comment->dateAdd()->format('d/m/Y à H\hi'),'</td><td><a href="../news-', $comment->news_id(), '.html"><img src="/images/update.png" alt="Voir la news" /></a></td></tr>', "\n";
     }
     ?>
 </table>
