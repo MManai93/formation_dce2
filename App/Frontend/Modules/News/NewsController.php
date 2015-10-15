@@ -131,32 +131,25 @@ class NewsController extends BackController
     }
   }
 
-  public function executeGetNewComments(HTTPRequest $request)
+  public function executeGetNewComments($newsId, $commentIdLast)
   {
-    if($request->postExists('news_id') && $request->postExists('comment_id_last'))
+    $newsManager=$this->managers->getManagerOf('News');
+    $news = $newsManager->getUnique($newsId);
+
+    if (empty($news))
     {
-      $newsId=$request->postData('news_id');
-      $commentIdLast=$request->postData('comment_id_last');
-
-      $newsManager=$this->managers->getManagerOf('News');
-      $news = $newsManager->getUnique($newsId);
-
-      if (empty($news))
-      {
-        $this->app->httpResponse()->redirect404();
-      }
-      $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($newsId);
-      $listCommentsAfterIdComment=[];
-      foreach($listCommentsofNews as $comment)
-      {
-        if($comment->id() > $commentIdLast)
-        {
-          $listCommentsAfterIdComment[]=$comment;
-        }
-      }
-      $this->page->addVar('title',$news->title());
-      $this->page->addVar('listComment',$listCommentsAfterIdComment);
+      $this->app->httpResponse()->redirect404();
     }
+    $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($newsId);
+    $listCommentsAfterIdComment=[];
+    foreach($listCommentsofNews as $comment)
+    {
+      if($comment->id() > $commentIdLast)
+      {
+        $listCommentsAfterIdComment[]=$comment;
+      }
+    }
+    $this->page->addVar('title',$news->title());
+    $this->page->addVar('listComment',$listCommentsAfterIdComment);
   }
-
 }
