@@ -56,11 +56,11 @@ class NewsController extends BackController
         $stringTags .= '<a href="tag-".$tag[0]></a>'. '/';
       }
     }*/
-
+    $comments=$this->managers->getManagerOf('Comments')->getListOf($news->id());
     $this->page->addVar('title', $news->title());
     $this->page->addVar('news', $news);
     $this->page->addVar('listTags',$listTags);
-    $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($news->id()));
+    $this->page->addVar('comments',$comments);
   }
 
   public function executeInsertComment(HTTPRequest $request)
@@ -143,32 +143,24 @@ class NewsController extends BackController
 
   public function executeGetNewComments(HTTPRequest $request)
   {
-    $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($request->postData('news_id'));
-    $listCommentsAfterIdComment=[];
-    foreach($listCommentsofNews as $comment)
-    {
-      if($comment->id() > $request->postData('comment_id_last'))
-      {
-        $listCommentsAfterIdComment[]=$comment;
-      }
-    }
-    $listCommentsAfterIdComment=json_encode($listCommentsAfterIdComment);
-    echo $listCommentsAfterIdComment;
-    exit();
+    $listCommentAfterId=$this->managers->getManagerOf('Comments')->getListOfAfter($request->postData('news_id'),$request->postData('comment_id_last'));
+    exit(json_encode($listCommentAfterId));
   }
 
   public function executeGetOldComments(HTTPRequest $request)
   {
     $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($request->postData('news_id'));
-    $listCommentsBeforeIdComment=[];
+    $listCommentsBeforeIdComment=array();
+    $i=0;
     foreach($listCommentsofNews as $comment)
     {
       if($comment->id() < $request->postData('comment_id_old'))
       {
-        $listCommentsBeforeIdComment[]=$comment;
+        $listCommentsBeforeIdComment[$i]=$comment->toArray();
+        $i+=1;
       }
     }
-    $listCommentsBeforeIdComment=json_encode($listCommentsBeforeIdComment);
+    $listCommentsBeforeIdComment=json_encode($listCommentsBeforeIdComment, JSON_PRETTY_PRINT);
     echo $listCommentsBeforeIdComment;
     exit();
   }

@@ -38,7 +38,7 @@ class CommentsManagerPDO extends CommentsManager
       throw new \InvalidArgumentException('L\'identifiant de la news passé doit être un nombre entier valide');
     }
  
-    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif, NCC_fk_NMC as member_id, NMC_login as member_login, NMC_email as member_email
+    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_fk_NAC as news_id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif, NCC_fk_NMC as member_id, NMC_login as member_login, NMC_email as member_email
                               FROM t_new_commentc
                               LEFT OUTER JOIN t_new_memberc ON NCC_fk_NMC=NMC_id
                               WHERE NCC_fk_NAC = :news
@@ -137,6 +137,41 @@ class CommentsManagerPDO extends CommentsManager
     $q->bindValue(':ghost_author',$ghostauthor);
     $q->execute();
     return $q->fetchColumn();
+  }
+
+  public function getListOfAfter($news_id,$comment_id_last)
+  {
+    if (!ctype_digit($news_id))
+    {
+      throw new \InvalidArgumentException('L\'identifiant de la news passé doit être un nombre entier valide');
+    }
+
+    if (!ctype_digit($comment_id_last))
+    {
+      throw new \InvalidArgumentException('L\'identifiant de du commentaire passé doit être un nombre entier valide');
+    }
+
+    $q = $this->dao->prepare('SELECT NCC_id as id, NCC_fk_NAC as news_id, NCC_ghostauthor as ghost_author, NCC_ghostemail as ghost_email, NCC_content as content, NCC_dateadd as dateAdd, NCC_datemodif as dateModif, NCC_fk_NMC as member_id, NMC_login as member_login, NMC_email as member_email
+                              FROM t_new_commentc
+                              LEFT OUTER JOIN t_new_memberc ON NCC_fk_NMC=NMC_id
+                              WHERE NCC_fk_NAC = :news_id AND NCC_id > :comment_id_last
+                              ORDER BY NCC_id');
+    $q->bindValue(':news_id', $news_id, \PDO::PARAM_INT);
+    $q->bindValue(':comment_id_last', $comment_id_last, \PDO::PARAM_INT);
+    $q->execute();
+
+    $q->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comment');
+
+    $listcomment = $q->fetchAll();
+
+    foreach ($listcomment as $Comment)
+    {
+      date_default_timezone_set('Europe/Paris');
+      $Comment->setDateAdd(new \DateTime($Comment->dateadd()));
+      $Comment->setDateModif(new \DateTime($Comment->dateModif()));
+    }
+    return $listcomment;
+
   }
 
 }

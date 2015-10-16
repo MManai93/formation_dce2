@@ -14,7 +14,8 @@
     <div id="wrap">
       <header>
         <h1><a href="/">Mon super site</a></h1>
-        <p><?php if ($user->isAuthenticated()) {echo 'Connecté(e) en tant que ',$user->getAttribute('login_user');}?></p>
+        <p><?php if ($user->isAuthenticated()) {echo 'Connecté(e) en tant que ',$user->getAttribute('login_user');}
+                                            else {echo 'Comment ça il n\'y a presque rien ?';}?></p>
       </header>
  
       <nav>

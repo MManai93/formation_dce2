@@ -3,7 +3,7 @@ namespace Entity;
  
 use \OCFram\Entity;
  
-class Comment extends Entity
+class Comment extends Entity implements \JsonSerializable
 {
   protected $news_id,
             $ghost_author,
@@ -126,6 +126,12 @@ class Comment extends Entity
   public function member_email()
   {
     return $this->member_email;
+  }
+
+  public function jsonSerialize()
+  {
+    return array ('comment_id'=>$this->id, 'news_id'=>$this->news_id, 'ghost_author'=>$this->ghost_author, 'ghost_email'=>$this->ghost_email, 'content'=> $this->content, 'dateAdd'=>$this->dateAdd,
+                  'dateModif'=>$this->dateModif, 'member_id'=>$this->member_id, 'member_login'=>$this->member_login, 'member_email'=>$this->member_email );
   }
 
 }

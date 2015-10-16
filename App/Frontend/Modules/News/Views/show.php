@@ -22,11 +22,10 @@ if (empty($comments))
 
 <?php
 }
-
 foreach ($comments as $comment)
 {
 ?>
-<fieldset>
+<fieldset class="comment" comment-id="<?= $comment->id()?>" news-id="<?=$comment->news_id()?>">
   <legend>
     Posté par <strong><?php if($comment->ghost_author()) { ?>
         <a href="/profil-ghost-<?=$comment->ghost_author()?>.html"><?=htmlspecialchars($comment->ghost_author())?></a>
@@ -41,21 +40,15 @@ foreach ($comments as $comment)
   </legend>
   <p><?= nl2br(htmlspecialchars($comment->content())) ?></p>
 </fieldset>
+
 <?php
 }
 ?>
-<p><a href="commenter-<?= $news->id() ?>.html">Ajouter un commentaire</a></p>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
-<script type="text/javascript">
-  function loadNewComments() {
-    var news=<?=$news->id()?>;
-    var comment=<?=$comments[count($comments)-1]->id()?>;
-    jQuery.post("getNewComments.html", {news_id: news, comment_id_last: comment},function(data){
-      $("p").append(data);
-    });
-    setTimeout(loadNewComments,5000);
-  }
-</script>
 
+<p><a href="commenter-<?= $news->id() ?>.html">Ajouter un commentaire</a></p>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+<script type="text/javascript" src="loadNewComments.js"></script>
 <button onclick="loadNewComments()">Recharger</button>
 
+<!-- <fieldset id="donnees"></fieldset>  -->
