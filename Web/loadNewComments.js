@@ -16,7 +16,7 @@ function loadNewComments()
             if (value.ghost_author != null) {
                 email = value.ghost_email;
                 author = value.ghost_author;
-                hreference = '/profil-ghost' + ghost_author + '.html';
+                hreference = '/profil-ghost-' + value.ghost_author + '.html';
             }
             else {
                 email = value.member_email;
@@ -28,7 +28,8 @@ function loadNewComments()
                 .addClass("comment")
                 .attr('comment-id', value.comment_id)
                 .attr('news-id', value.news_id)
-                .append('<legend>qffe</legend>')
+                .append('<legend>Poste par <strong><a href="'+hreference+'">'+author+'</a></strong> le '+value.dateAdd.date+'<em>'+email+'</em></legend>')
+                .append('<p>'+value.content+'</p>')
 
             /*$('<fieldset></fieldset>')
              .addClass('comment')
