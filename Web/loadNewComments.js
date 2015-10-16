@@ -26,18 +26,18 @@ function loadNewComments()
             }
             if(value.dateAdd.date!=value.dateModif.date)
             {
-                affichagedate='le'+value.dateAdd.date+'<em> Modifiée le '+value.dateModif.date+'</em>' ;
+                affichagedate='le'+change(value.dateAdd.date)+'<em><small> Modifiée le '+change(value.dateModif.date)+'</small></em>' ;//enlever change
             }
             else
             {
-                affichagedate='le '+value.dateAdd.date;
+                affichagedate='le '+change(value.dateAdd.date);
             }
             /*passer les attributs de href et ghost (true ou false) dans les attributs de la balise fieldset*/
             $('<fieldset></fieldset>').insertAfter($('.comment:last'))
                 .addClass("comment")
                 .attr('comment-id', value.comment_id)
                 .attr('news-id', value.news_id)
-                .append('<legend>Poste par <strong><a href="'+hreference+'"> '+author+'</a></strong>'+affichagedate+'<em> '+email+'</em></legend>')/*format date*/
+                .append('<legend>Poste par <strong><a href="'+hreference+'"> '+author+'</a></strong> '+affichagedate+'<em> '+email+'</em></legend>')/*format date*/
                 .append('<p>'+value.content+'</p>')
         })
 

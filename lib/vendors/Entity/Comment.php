@@ -128,7 +128,7 @@ class Comment extends Entity implements \JsonSerializable
     return $this->member_email;
   }
 
-  public function jsonSerialize()
+  public function jsonSerialize()//mettre format date ici
   {
     return array ('comment_id'=>$this->id, 'news_id'=>$this->news_id, 'ghost_author'=>$this->ghost_author, 'ghost_email'=>$this->ghost_email, 'content'=> $this->content, 'dateAdd'=>$this->dateAdd,
                   'dateModif'=>$this->dateModif, 'member_id'=>$this->member_id, 'member_login'=>$this->member_login, 'member_email'=>$this->member_email );
