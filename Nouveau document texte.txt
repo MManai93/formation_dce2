@@ -1,0 +1,2 @@
+mettre dans balises fieldset les attributs pour modif et supresion des comentaires
+metre href auteur email dans jsionserialize ainsi que dateadd!=datemodif
