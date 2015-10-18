@@ -43,5 +43,5 @@ function loadNewComments()
 
     },"json");
 
-    //setTimeout(loadNewComments,5000);
+    //setTimeout(loadNewComments,5000); TEST COMMIT DEPUIS PHPSTORM
 }
