@@ -161,7 +161,7 @@ class MemberManagerPDO extends MemberManager
 
         $requete->bindValue(':email', $member->email());
         $requete->bindValue(':birthday', $member->birthday());
-        $requete->bindValue(':adress', $member->birthday());
+        $requete->bindValue(':adress', $member->adress());
         $requete->bindValue(':city', $member->city());
         $requete->bindValue(':country', $member->country());
         $requete->bindValue(':id', $member->id(), \PDO::PARAM_INT); // setter avec getattribute('id_user') dans controller ou request->getdata('id')
