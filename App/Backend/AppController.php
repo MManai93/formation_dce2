@@ -7,6 +7,32 @@ trait AppController
     protected $listMenu;
     protected $entete;
 
+    public function flash()
+    {
+        $user=$this->app->user();
+        if ($user->hasFlash())
+        {
+            $this->page->addVar('flash', '<p style="text-align: center;">'. $user->getFlash().'</p>');
+        }
+       else
+       {
+           $this->page->addVar('flash', '');
+       }
+    }
+    public function entete()
+    {
+        $user=$this->app->user();
+        if($user->isAuthenticated())
+        {
+            $this->entete='Connecté en tant que '.$user->getAttribute('login_user');
+        }
+        else
+        {
+            $this->entete='Comment ça il y a presque rien ?';
+        }
+        $this->page->addVar('header',$this->entete);
+    }
+
     public function menu()
     {
         $user=$this->app->user();
@@ -18,20 +44,20 @@ trait AppController
             $this->listMenu[]=array('text'=>'Ajouter une news', 'link' =>'/admin/news-insert.html');
             $this->listMenu[]=array('text'=>'Afficher mon profil', 'link' =>'/admin/profil-'.$user->getAttribute('id_user').'.html');
             $this->listMenu[]=array('text'=>'Déconnexion', 'link' =>'/admin/deconnexion.html');
-            $this->entete='Connecté en tant que '.$user->getAttribute('login_user');
+
         }
         else
         {
             $this->listMenu[]=array('text'=>'Inscription', 'link'=>'/inscription.html');
             $this->listMenu[]=array('text'=>'Connexion', 'link'=>'/connexion.html');
-            $this->entete='Comment ça il y a presque rien ?';
         }
+        $this->page->addVar('Menu',$this->listMenu);
     }
 
     public function run()
     {
         $this->menu();
-        $this->page->addVar('Menu',$this->listMenu);
-        $this->page->addVar('header',$this->entete);
+        $this->entete();
+        $this->flash();
     }
 }

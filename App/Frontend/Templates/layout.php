@@ -26,7 +26,7 @@
  
       <div id="content-wrap">
         <section id="main">
-          <?php if ($user->hasFlash()) echo '<p style="text-align: center;">', $user->getFlash(), '</p>'; ?> <!-- a changer -->
+          <?=$flash ?> <!-- a changer -->
  
           <?= $content ?>
         </section>
