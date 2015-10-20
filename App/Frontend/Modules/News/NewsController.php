@@ -1,7 +1,6 @@
 <?php
 namespace App\Frontend\Modules\News;
 
-
 use App\Frontend\AppController;
 use Model\NewsManager;
 use \OCFram\BackController;
@@ -120,7 +119,7 @@ class NewsController extends BackController
       {
         $this->app->user()->setFlash('Le commentaire a bien été ajouté, merci !');
 
-        $this->app->httpResponse()->redirect('news-' . $request->getData('news') . '.html');
+        $this->app->httpResponse()->redirect('news-' . $request->getData('news') . '.html');//A CHANGER
       }
 
       $this->page->addVar('comment', $comment);

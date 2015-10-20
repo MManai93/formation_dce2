@@ -28,12 +28,12 @@ class NewsController extends BackController
         $this->managers->getManagerOf('News')->delete($newsId);
         $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
         $this->app->user()->setFlash('La news a bien été supprimée !');
-        $this->app->httpResponse()->redirect('/');
+        $this->app->httpResponse()->redirect('/');//A CHANGER
       }
       else
       {
         $this->app->user()->setFlash('Erreur : Vous n\'etes pas l\'auteur de la news !');
-        $this->app->httpResponse()->redirect('/');
+        $this->app->httpResponse()->redirect('/');//A CHANGER
       }
     }
   }
@@ -46,13 +46,13 @@ class NewsController extends BackController
     {
       $this->managers->getManagerOf('Comments')->delete($request->getData('id'));
       $this->app->user()->setFlash('Le commentaire a bien été supprimé !');
-      $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');
+      $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');//A CHANGER
     }
 
     else
     {
       $this->app->user()->setFlash('Erreur : Vous n\'etes pas l\'auteur du commentaire !');
-      $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');
+      $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');//A CHANGER
     }
 
   }
@@ -79,7 +79,7 @@ class NewsController extends BackController
     else
     {
       $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
-      $this->app->httpResponse()->redirect('/');
+      $this->app->httpResponse()->redirect('/');//A CHANGER
     }
   }
  
@@ -94,7 +94,7 @@ class NewsController extends BackController
     else
     {
       $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
-      $this->app->httpResponse()->redirect('/');
+      $this->app->httpResponse()->redirect('/');//A CHANGER
     }
   }
  
@@ -120,7 +120,7 @@ class NewsController extends BackController
         if($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')!=$comment->member_id())
         {
           $this->app->user()->setFlash('Erreur : Vous n\'êtes pas l\'auteur de ce commentaire');
-          $this->app->httpResponse()->redirect('/');
+          $this->app->httpResponse()->redirect('/');//A CHANGER
         }
       }
       else
@@ -141,7 +141,7 @@ class NewsController extends BackController
       {
         $this->app->user()->setFlash('Le commentaire a bien été modifié');
         $news=$this->managers->getManagerOf('Comments')->getNews($request->getData('id'));
-        $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');
+        $this->app->httpResponse()->redirect('../news-'.$news->id().'.html');//A CHANGER
       }
 
       $this->page->addVar('form', $form->createView());
@@ -180,7 +180,7 @@ class NewsController extends BackController
         if($this->app->user()->getAttribute('groupe_user')==2 && $this->app->user()->getAttribute('id_user')!=$news->member_id())
         {
           $this->app->user()->setFlash('Erreur : Vous n\'êtes pas l\'auteur de cette news');
-          $this->app->httpResponse()->redirect('/');
+          $this->app->httpResponse()->redirect('/');//A CHANGER
         }
       }
       else
@@ -201,7 +201,7 @@ class NewsController extends BackController
       {
         $this->app->user()->setFlash($news->isNew() ? 'La news a bien été ajoutée !' : 'La news a bien été modifiée !');
 
-        $this->app->httpResponse()->redirect('/admin/');
+        $this->app->httpResponse()->redirect('/admin/');//A CHANGER
       }
 
       $this->page->addVar('form', $form->createView());

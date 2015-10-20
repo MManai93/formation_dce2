@@ -4,7 +4,7 @@
   <route url="/admin/deconnexion\.html" module="Deconnexion" action="index" />
 
   <route url="/admin/profil-([0-9]+)\.html" module="Member" action="index" vars="id" />
-  <route url="/admin/profil-list\.html" module="Member" action="show" />
+  <route url="/admin/profil-list.html" module="Member" action="show" />
   <route url="/admin/profil-comments-([0-9]+)\.html" module="Member" action="showComments" vars="id" />
   <route url="/admin/profil-news-([0-9]+)\.html" module="Member" action="showNews" vars="id" />
   <route url="/admin/profil-update-login-([0-9]+)\.html" module="Member" action="updateLogin" vars="id" />

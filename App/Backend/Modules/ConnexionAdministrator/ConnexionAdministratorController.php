@@ -27,7 +27,7 @@ class ConnexionAdministratorController extends BackController
         $this->app->user()->setAttribute('login_user',$Identifiants->login());
         $this->app->user()->setAttribute('email_user',$Identifiants->email());
         $this->app->user()->setAttribute('groupe_user',$Identifiants->groupe_id());
-        $this->app->httpResponse()->redirect('.');
+        $this->app->httpResponse()->redirect('.');//A CHANGER
       }
       else
       {

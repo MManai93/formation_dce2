@@ -65,15 +65,39 @@ abstract class CommentsManager extends Manager
    */
   abstract public function get($id);
 
+  /**
+   * @param $id
+   * @return mixed
+   */
   abstract public function getNews($id);
 
+  /**
+   * @return mixed
+   */
   abstract public function getGhostAuthor();
 
+  /**
+   * @param $ghostauthor
+   * @return mixed
+   */
   abstract public function getCommentGhostAuthor($ghostauthor);
 
+  /**
+   * @param $ghostauthor
+   * @return mixed
+   */
   abstract public function countCommentGhostAuthor($ghostauthor);
 
+  /**
+   * @param $news
+   * @return mixed
+   */
   abstract public function countComments($news);
 
+  /**
+   * @param $news_id
+   * @param $comment_id_old
+   * @return mixed
+   */
   abstract public function getListOfBefore($news_id,$comment_id_old);
 }

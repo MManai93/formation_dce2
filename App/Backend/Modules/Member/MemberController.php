@@ -23,7 +23,7 @@ class MemberController extends BackController
         elseif (!$this->app->user()->isAuthenticated())
         {
             $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
-            $this->app->httpResponse()->redirect('/');
+            $this->app->httpResponse()->redirect('/');//A CHANGER
         }
         else
         {
@@ -44,11 +44,11 @@ class MemberController extends BackController
                             session_destroy();
                             $this->managers->getManagerOf('Member')->delete($profilId);
                             $this->app->user()->setFlash('Le membre a bien été supprimé !');
-                            $this->app->httpResponse()->redirect('/');
+                            $this->app->httpResponse()->redirect('/');//A CHANGER
                         }
                         elseif ($request->postExists('No'))
                         {
-                            $this->app->httpResponse()->redirect('/profil-'.$Member->id().'.html');
+                            $this->app->httpResponse()->redirect('/profil-'.$Member->id().'.html');//A CHANGER
                         }
                     }
 
@@ -57,14 +57,14 @@ class MemberController extends BackController
                 {
                     $this->managers->getManagerOf('Member')->delete($profilId);
                     $this->app->user()->setFlash('Le membre a bien été supprimé !');
-                    $this->app->httpResponse()->redirect('/');
+                    $this->app->httpResponse()->redirect('/');//A CHANGER
                 }
 
             }
             else
             {
                 $this->app->user()->setFlash('Erreur : Vous n\'avez pas les droits nécessaires !');
-                $this->app->httpResponse()->redirect('/');
+                $this->app->httpResponse()->redirect('/');//A CHANGER
             }
         }
     }
@@ -104,7 +104,7 @@ class MemberController extends BackController
         else
         {
             $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
-            $this->app->httpResponse()->redirect('/');
+            $this->app->httpResponse()->redirect('/');//A CHANGER
         }
     }
 
@@ -120,7 +120,7 @@ class MemberController extends BackController
         elseif (!$this->app->user()->isAuthenticated())
         {
             $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
-            $this->app->httpResponse()->redirect('/');
+            $this->app->httpResponse()->redirect('/');//A CHANGER
         }
         else
         {
@@ -170,7 +170,7 @@ class MemberController extends BackController
         elseif (!$this->app->user()->isAuthenticated())
         {
             $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
-            $this->app->httpResponse()->redirect('/');
+            $this->app->httpResponse()->redirect('/');//A CHANGER
         }
 
         else
@@ -185,7 +185,7 @@ class MemberController extends BackController
             else
             {
                 $this->app->user()->setFlash('Erreur : Vous n\'avez pas les droits nécessaires !');
-                $this->app->httpResponse()->redirect('/');
+                $this->app->httpResponse()->redirect('/');//A CHANGER
             }
         }
 
@@ -205,7 +205,7 @@ class MemberController extends BackController
         elseif (!$this->app->user()->isAuthenticated())
         {
             $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
-            $this->app->httpResponse()->redirect('/');
+            $this->app->httpResponse()->redirect('/');//A CHANGER
         }
 
         else
@@ -224,7 +224,7 @@ class MemberController extends BackController
                     if($memberManager->FindUser($request->postExists('newlogin')))
                     {
                         $this->app->user()->setFlash('Ce login est déjà utilisé !');
-                        $this->app->httpResponse()->redirect('/profil-update-login-'.$Member->id().'.html');
+                        $this->app->httpResponse()->redirect('/profil-update-login-'.$Member->id().'.html');//A CHANGER
                     }
 
                     elseif ($identifiants)
@@ -232,20 +232,20 @@ class MemberController extends BackController
                         $memberManager->modifyLogin($request->postData('newlogin'),$Member->groupe_id());
                         $this->app->user()->setAttribute('login_user',$request->postData('newlogin'));
                         $this->app->user()->setFlash('Votre login a bien été modifié !');
-                        $this->app->httpResponse()->redirect('profil-'.$request->getData('id').'.html');
+                        $this->app->httpResponse()->redirect('profil-'.$request->getData('id').'.html');//A CHANGER
                     }
 
                     else
                     {
                         $this->app->user()->setFlash('Mot de passe incorrect!');
-                        $this->app->httpResponse()->redirect('profil-update-login-'.$Member->id().'.html');
+                        $this->app->httpResponse()->redirect('profil-update-login-'.$Member->id().'.html');//A CHANGER
                     }
                 }
             }
             else
             {
                 $this->app->user()->setFlash('Erreur : Vous n\'avez pas les droits nécessaires !');
-                $this->app->httpResponse()->redirect('/');
+                $this->app->httpResponse()->redirect('/');//A CHANGER
             }
         }
     }
@@ -264,7 +264,7 @@ class MemberController extends BackController
         elseif (!$this->app->user()->isAuthenticated())
         {
             $this->app->user()->setFlash('Vous n\'êtes pas connecté !');
-            $this->app->httpResponse()->redirect('/');
+            $this->app->httpResponse()->redirect('/');//A CHANGER
         }
 
         else
@@ -283,19 +283,19 @@ class MemberController extends BackController
                     {
                         $memberManager->modifyPassword(sha1($request->postData('newpassword')),$Member->id());
                         $this->app->user()->setFlash('Le mot de passe a bien été modifié !');
-                        $this->app->httpResponse()->redirect('/admin/profil-'.$Member->id().'.html');
+                        $this->app->httpResponse()->redirect('/admin/profil-'.$Member->id().'.html');//A CHANGER
                     }
                     else
                     {
                         $this->app->user()->setFlash('Mot de passe incorrect!');
-                        $this->app->httpResponse()->redirect('/admin/profil-update-password-'.$Member->id().'.html');
+                        $this->app->httpResponse()->redirect('/admin/profil-update-password-'.$Member->id().'.html');//A CHANGER
                     }
                 }
             }
             else
             {
                 $this->app->user()->setFlash('Erreur : Vous n\'avez pas les droits nécessaires !');
-                $this->app->httpResponse()->redirect('/');
+                $this->app->httpResponse()->redirect('/');//A CHANGER
             }
         }
     }

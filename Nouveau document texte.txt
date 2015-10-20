@@ -1,3 +1,4 @@
 refactoriser dans loadComments.js
 show.png
 select pays
+faire les geturl partout

@@ -16,7 +16,7 @@ class ConnexionMemberController extends BackController
         if($this->app->user()->isAuthenticated())
         {
             $this->app->user()->setFlash('Vous êtes déjà connecté !');
-            $this->app->httpResponse()->redirect('/');
+            $this->app->httpResponse()->redirect('/');//A CHANGER
         }
 
         if ($Request->postExists('login'))

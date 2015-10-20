@@ -7,15 +7,22 @@ class Router
   protected $routes = [];
  
   const NO_ROUTE = 1;
- 
+
+  /**
+   * @param Route $route
+   */
   public function addRoute(Route $route)
   {
     if (!in_array($route, $this->routes))
     {
-      $this->routes[] = $route;
+      $this->routes[$route->module().$route->action()] = $route;
     }
   }
- 
+
+  /**
+   * @param $url
+   * @return Route
+   */
   public function getRoute($url)
   {
     foreach ($this->routes as $route)
@@ -49,5 +56,36 @@ class Router
     }
  
     throw new \RuntimeException('Aucune route ne correspond à l\'URL', self::NO_ROUTE);
+  }
+
+  /**
+   * @param $module
+   * @param $action
+   * @param array|null $varsNamesValues
+   * @return string|void
+   */
+  public function getUrl($module,$action,array $varsNamesValues=null)
+  {
+      $route=$this->routes[$module.$action];
+      if (empty($route))
+      {
+        throw new \RuntimeException('Aucune route ne correspond au module et à l\'action passés en paramètres', self::NO_ROUTE);
+      }
+      if($varsNamesValues==null)
+      {
+        return $route->url();
+      }
+      else
+      {
+        foreach($route->varsNames() as $name)
+        {
+          if(!array_key_exists($name,$varsNamesValues))
+          {
+            throw new \RuntimeException('Erreur : nom variable non correct!');
+          }
+          $url=str_replace(array('([0-9]+)\\','([a-z]+)\\'),$varsNamesValues[$name],$route->url(),1);
+        }
+        return $url;
+      }
   }
 }

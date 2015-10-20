@@ -20,24 +20,24 @@ class DeconnexionController extends BackController
             {
                 $this->app->user()->setAuthenticated(false);
                 session_destroy();
-                $this->app->httpResponse()->redirect('/');
+                $this->app->httpResponse()->redirect('/');//A CHANGER
             }
             elseif ($Request->postExists('No'))
             {
                 if($this->app->user()->getAttribute('groupe_user')==self::$ADMIN_ID)
                 {
-                    $this->app->httpResponse()->redirect('/admin/');
+                    $this->app->httpResponse()->redirect('/admin/');//A CHANGER
                 }
                 elseif ($this->app->user()->getAttribute('groupe_user')==self::$MEMBER_ID)
                 {
-                    $this->app->httpResponse()->redirect('/');
+                    $this->app->httpResponse()->redirect('/');//A CHANGER
                 }
             }
         }
         else
         {
             $this->app->user()->setFlash('Vous n\'êtes pas connecté!');
-            $this->app->httpResponse()->redirect('/');
+            $this->app->httpResponse()->redirect('/');//A CHANGER
         }
     }
 
