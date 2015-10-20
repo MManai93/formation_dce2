@@ -1,6 +1,7 @@
 <?php
 namespace App\Frontend\Modules\Registration;
 
+use App\Frontend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \Entity\Member;
@@ -9,9 +10,11 @@ use \OCFram\FormHandler;
 
 class RegistrationController extends BackController
 {
+    use AppController;
     protected static $GROUPE_ID=2;
     public function executeIndex(HTTPRequest $request)
     {
+        $this->run();
         if($this->app->user()->isAuthenticated())
         {
             $this->app->user()->setFlash('Vous êtes déjà connecté : Opération impossible !');

@@ -1,15 +1,18 @@
 <?php
 namespace App\Backend\Modules\Deconnexion;
 
+use App\Backend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 
 class DeconnexionController extends BackController
 {
+    use AppController;
     private static $ADMIN_ID=1,
                    $MEMBER_ID=2;
     public function executeIndex(HTTPRequest $Request)
     {
+        $this->run();
         $this->page->addVar('title', 'Deconnexion');
         if($this->app->user()->isAuthenticated())
         {

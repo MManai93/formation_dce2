@@ -1,6 +1,7 @@
 <?php
 namespace App\Backend\Modules\News;
  
+use App\Backend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \Entity\News;
@@ -11,6 +12,7 @@ use \OCFram\FormHandler;
  
 class NewsController extends BackController
 {
+  use AppController;
   public function executeDelete(HTTPRequest $request)
   {
     $newsId = $request->getData('id');
@@ -63,10 +65,12 @@ class NewsController extends BackController
  
     $this->page->addVar('listeNews', $manager->getList());
     $this->page->addVar('nombreNews', $manager->count());
+    $this->run();
   }
  
   public function executeInsert(HTTPRequest $request)
   {
+    $this->run();
     if($this->app->user()->isAuthenticated())
     {
       $this->processForm($request);
@@ -81,6 +85,7 @@ class NewsController extends BackController
  
   public function executeUpdate(HTTPRequest $request)
   {
+    $this->run();
     if($this->app->user()->isAuthenticated())
     {
       $this->processForm($request);
@@ -96,7 +101,7 @@ class NewsController extends BackController
   public function executeUpdateComment(HTTPRequest $request)
   {
     $this->page->addVar('title', 'Modification d\'un commentaire');
- 
+    $this->run();
     if ($request->method() == 'POST')
     {
       $comment = new Comment([

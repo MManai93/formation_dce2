@@ -5,28 +5,34 @@ namespace App\Frontend;
 trait AppController
 {
     protected $listMenu;
+    protected $entete;
 
-    protected function run()
+    public function menu()
     {
-        $this->menu();
-        $this->page()->addVar('Menu',$listMenu);
-    }
-
-    public function menu($text,$link)
-    {
-        $listMenu[]=array('text'=>'Accueil', 'link' => '/');
+        $user=$this->app->user();
+        $this->listMenu[]=array('text'=>'Accueil', 'link' => '/');
         if($user->isAuthenticated())
         {
-            $listMenu[]=array('text'=>'Afficher les news', 'link' =>'/admin/');
-            $listMenu[]=array('text'=>'Membres', 'link' => '/admin/profil-list.html');
-            $listMenu[]=array('text'=>'Ajouter une news', 'link' =>'/admin/news-insert.html');
-            $listMenu[]=array('text'=>'Afficher mon profil', 'link' =>'/admin/profil-',$user->getAttribute('id_user'),'.html');
-            $listMenu[]=array('text'=>'Déconnexion', 'link' =>'/admin/deconnexion.html');
+            $this->listMenu[]=array('text'=>'Afficher les news', 'link' =>'/admin/');
+            $this->listMenu[]=array('text'=>'Membres', 'link' => '/admin/profil-list.html');
+            $this->listMenu[]=array('text'=>'Ajouter une news', 'link' =>'/admin/news-insert.html');
+            $this->listMenu[]=array('text'=>'Afficher mon profil', 'link' =>'/admin/profil-'.$user->getAttribute('id_user').'.html');
+            $this->listMenu[]=array('text'=>'Déconnexion', 'link' =>'/admin/deconnexion.html');
+            $this->entete='Connecté en tant que '.$user->getAttribute('login_user');
         }
         else
         {
-            $listMenu[]=array('text'=>'Inscription', 'link'=>'/inscription.html');
-            $listMenu[]=array('text'=>'Connexion', 'link'=>'/connexion.html');
+            $this->listMenu[]=array('text'=>'Inscription', 'link'=>'/inscription.html');
+            $this->listMenu[]=array('text'=>'Connexion', 'link'=>'/connexion.html');
+            $this->entete='Comment ça il y a presque rien ?';
         }
     }
+
+    public function run()
+    {
+        $this->menu();
+        $this->page->addVar('Menu',$this->listMenu);
+        $this->page->addVar('header',$this->entete);
+    }
+
 }

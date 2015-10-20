@@ -1,6 +1,8 @@
 <?php
 namespace App\Frontend\Modules\News;
- 
+
+
+use App\Frontend\AppController;
 use Model\NewsManager;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
@@ -8,11 +10,10 @@ use \Entity\Comment;
 use \FormBuilder\CommentFormBuilder;
 use \OCFram\FormHandler;
 
-//la methode run mettra le lien avec son texte et generara la page aveec addvar
-
  
 class NewsController extends BackController
 {
+  use AppController;
   public function executeIndex(HTTPRequest $request)
   {
     $nombreNews = $this->app->config()->get('nombre_news');
@@ -38,6 +39,8 @@ class NewsController extends BackController
 
     // On ajoute la variable $listeNews à la vue.
     $this->page->addVar('listeNews', $listeNews);
+    $this->run();
+
   }
 
   public function executeShow(HTTPRequest $request)
@@ -58,10 +61,12 @@ class NewsController extends BackController
     $this->page->addVar('listTags',$listTags);
     $this->page->addVar('comments',$comments);
     $this->page->addVar('display_button_show_more',$commentManager->countComments($news->id()) > count($comments));
+    $this->run();
   }
 
   public function executeInsertComment(HTTPRequest $request)
   {
+    $this->run();
     // Si le formulaire a été envoyé.
     $comment=null;
     $auth=$this->app->user()->isAuthenticated();
@@ -136,6 +141,7 @@ class NewsController extends BackController
     $this->page->addVar('listNews', $listNews);
     $this->page->addVar('TagName', $request->getData('name'));
     $this->page->addVar('countNews', count($listNews));
+    $this->run();
   }
 
   public function executeGetComments(HTTPRequest $request)

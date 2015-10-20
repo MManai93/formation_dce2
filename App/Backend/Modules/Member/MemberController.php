@@ -1,6 +1,7 @@
 <?php
 namespace App\Backend\Modules\Member;
 
+use App\Backend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \Entity\Member;
@@ -9,8 +10,10 @@ use \OCFram\FormHandler;
 
 class MemberController extends BackController
 {
+    use AppController;
     public function executeDelete(HTTPRequest $request)
     {
+        $this->run();
         $profilId = $request->getData('id');
         $Member =$this->managers->getManagerOf('Member')->getUnique($profilId);
         if(empty($Member))
@@ -85,10 +88,12 @@ class MemberController extends BackController
         $this->page->addVar('adresse',$Member->adress());
         $this->page->addVar('ville',$Member->city());
         $this->page->addVar('pays',$Member->country());
+        $this->run();
     }
 
     public function executeShow(HTTPRequest $request)
     {
+        $this->run();
         if ($this->app->user()->isAuthenticated())
         {
             $this->page->addVar('title', 'Gestion des membres');
@@ -105,6 +110,7 @@ class MemberController extends BackController
 
     public function executeShowComments(HTTPRequest $request)
     {
+        $this->run();
         $profilId = $request->getData('id');
         $Member = $this->managers->getManagerOf('Member')->getUnique($profilId);
         if(empty($Member))
@@ -129,6 +135,7 @@ class MemberController extends BackController
 
     public function executeShowNews(HTTPRequest $request)
     {
+        $this->run();
         $profilId = $request->getData('id');
         $Member = $this->managers->getManagerOf('Member')->getUnique($profilId);
         if(empty($Member))
@@ -152,6 +159,7 @@ class MemberController extends BackController
 
     public function executeUpdate(HTTPRequest $request)
     {
+        $this->run();
         $profilId = $request->getData('id');
         $Member = $this->managers->getManagerOf('Member')->getUnique($profilId);
         if(empty($Member))
@@ -185,6 +193,7 @@ class MemberController extends BackController
 
     public function executeUpdateLogin(HTTPRequest $request)
     {
+        $this->run();
         $profilId = $request->getData('id');
         $memberManager=$this->managers->getManagerOf('Member');
         $Member = $memberManager->getUnique($profilId);
@@ -243,6 +252,7 @@ class MemberController extends BackController
 
     public function executeUpdatePassword(HTTPRequest $request)
     {
+        $this->run();
         $profilId = $request->getData('id');
         $memberManager=$this->managers->getManagerOf('Member');
         $Member = $memberManager->getUnique($profilId);

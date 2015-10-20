@@ -1,14 +1,17 @@
 <?php
 namespace App\Frontend\Modules\ConnexionMember;
 
+use App\Frontend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 
 class ConnexionMemberController extends BackController
 {
+    use AppController;
     private static $GROUP_ID = 2;
     public function executeIndex(HTTPRequest $Request)
     {
+        $this->run();
         $this->page->addVar('title', 'Connexion Membre');
         if($this->app->user()->isAuthenticated())
         {

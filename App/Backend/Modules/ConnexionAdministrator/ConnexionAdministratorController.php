@@ -1,14 +1,17 @@
 <?php
 namespace App\Backend\Modules\ConnexionAdministrator;
  
+use App\Backend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
  
 class ConnexionAdministratorController extends BackController
 {
+  use AppController;
   private static $GROUP_ID = 1;
   public function executeIndex(HTTPRequest $Request)
   {
+    $this->run();
     $this->page->addVar('title', 'Connexion Administrateur');
  
     if ($Request->postExists('login'))

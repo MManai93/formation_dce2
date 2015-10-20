@@ -1,13 +1,17 @@
 <?php
 namespace App\Frontend\Modules\GhostMember;
 
+use App\Frontend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 
+
 class GhostMemberController extends BackController
 {
+    use AppController;
     public function executeShow(HTTPRequest $request)
     {
+        $this->run();
         $commentManager=$this->managers->getManagerOf('Comments');
         $listComment=$commentManager->getCommentGhostAuthor($request->getData('name'));
         if(empty($listComment))

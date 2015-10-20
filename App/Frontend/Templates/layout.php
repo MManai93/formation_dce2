@@ -14,26 +14,32 @@
     <div id="wrap">
       <header>
         <h1><a href="/">Mon super site</a></h1>
-        <p><?php if ($user->isAuthenticated()) {echo 'Connecté(e) en tant que ',$user->getAttribute('login_user');}
-                                            else {echo 'Comment ça il n\'y a presque rien ?';}?></p>
+        <p><?php echo $header ?></p>
       </header>
- 
+      <nav>
+        <ul>
+          <?php foreach($Menu as $redirection) {?>
+          <li><a href="<?=$redirection['link']?>"><?=$redirection['text']?></a></li>
+          <?php }?>
+        </ul>
+      </nav>
+      <!--
       <nav>
         <ul>
           <li><a href="/">Accueil</a></li>
-          <?php if ($user->isAuthenticated()) { ?>
+
           <li><a href="/admin/">Afficher les news</a></li>
           <li><a href="/admin/profil-list.html">Membres</a></li>
           <li><a href="/admin/news-insert.html">Ajouter une news</a></li>
-          <li><a href="/admin/profil-<?= $user->getAttribute('id_user')?>.html">Afficher mon profil</a></li>
+          <li><a href="/admin/profil-.html">Afficher mon profil</a></li>
           <li><a href="/admin/deconnexion.html">Déconnexion</a></li>
-          <?php } else {?>
+
           <li><a href="/inscription.html">Inscription</a></li>
           <li><a href="/connexion.html">Connexion</a></li>
-          <?php }?>
+
 
         </ul>
-      </nav>
+      </nav>-->
  
       <div id="content-wrap">
         <section id="main">
