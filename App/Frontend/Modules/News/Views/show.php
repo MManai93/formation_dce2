@@ -18,10 +18,12 @@
 if (empty($comments))
 {
 ?>
-<p>Aucun commentaire n'a encore été posté. Soyez le premier à en laisser un !</p>
+<p class="no_comment">Aucun commentaire n'a encore été posté. Soyez le premier à en laisser un !</p>
 
 <?php
 }
+else
+  echo '<p class="alert_5_last_comments"><em>Liste des 5 derniers commentaires</em></p>';
 foreach ($comments as $comment)
 {
 ?>
@@ -46,9 +48,13 @@ foreach ($comments as $comment)
 ?>
 
 <p><a href="commenter-<?= $news->id() ?>.html">Ajouter un commentaire</a></p>
-
+<div id="data" data-news_id="<?=$news->id()?>" data-groupe_user="<?=$user->getAttribute('groupe_user')?>" data-id_user="<?=$user->getAttribute('id_user')?>"></div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
-<script type="text/javascript" src="loadNewComments.js"></script>
-<button onclick="loadNewComments()">Recharger</button>
-
-<!-- <fieldset id="donnees"></fieldset>  -->
+<script type="text/javascript" src="loadComments.js"></script>
+<button id="show_new" onclick="loadComments(this.id)">Nouveaux commentaires</button>
+<?php
+  if($display_button_show_more)
+  {
+    echo '<button id="show_more" onclick="loadComments(this.id)">Voir plus</button>';
+  }
+?>

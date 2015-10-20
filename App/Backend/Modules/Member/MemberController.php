@@ -77,6 +77,7 @@ class MemberController extends BackController
         $this->page->addVar('title','Profil de '.$Member->login());
         $this->page->addVar('user',$this->app->user());
         $this->page->addVar('idMembre',$Member->id());
+        $this->page->addVar('groupeMembre',$Member->groupe_id());
         $this->page->addVar('login',$Member->login()); //gerer les visibilités selon l'envie des utilisateurs
         $this->page->addVar('email',$Member->email());
         $this->page->addVar('dateInscription',$Member->dateRegistration() != '0000-00-00' ? $Member->dateRegistration() : null );

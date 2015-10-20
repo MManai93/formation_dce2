@@ -2,6 +2,7 @@
 namespace Entity;
  
 use \OCFram\Entity;
+use \DateTime;
  
 class Comment extends Entity implements \JsonSerializable
 {
@@ -58,12 +59,12 @@ class Comment extends Entity implements \JsonSerializable
     $this->content = $content;
   }
  
-  public function setDateAdd(\DateTime $dateAdd)
+  public function setDateAdd(DateTime $dateAdd)
   {
     $this->dateAdd = $dateAdd;
   }
 
-  public function setDateModif(\DateTime $dateModif)
+  public function setDateModif(DateTime $dateModif)
   {
     $this->dateModif = $dateModif;
   }
@@ -128,10 +129,20 @@ class Comment extends Entity implements \JsonSerializable
     return $this->member_email;
   }
 
-  public function jsonSerialize()//mettre format date ici
+
+  public function jsonSerialize()
   {
-    return array ('comment_id'=>$this->id, 'news_id'=>$this->news_id, 'ghost_author'=>$this->ghost_author, 'ghost_email'=>$this->ghost_email, 'content'=> $this->content, 'dateAdd'=>$this->dateAdd,
-                  'dateModif'=>$this->dateModif, 'member_id'=>$this->member_id, 'member_login'=>$this->member_login, 'member_email'=>$this->member_email );
+    return array ('comment_id'=>$this->id,
+                  'news_id'=>$this->news_id,
+                  'author'=> $this->ghost_author !=null ? $this->ghost_author : $this->member_login,
+                  'email'=> $this->ghost_email !=null ? $this->ghost_email : $this->member_email,
+                  'content'=> $this->content,
+                  'dateAdd'=>$this->dateAdd->format('d/m/Y - H\hi'),
+                  'dateModif'=>$this->dateModif->format('d/m/Y - H\hi'),
+                  'member_id'=>$this->member_id,
+                  'isModified' =>($this->dateAdd!=$this->dateModif),
+                  'author_profil_url' =>$this->ghost_author !=null ? '/profil-ghost-'.$this->ghost_author.'.html' : '/admin/profil-'.$this->member_id.'.html'
+                   );
   }
 
 }

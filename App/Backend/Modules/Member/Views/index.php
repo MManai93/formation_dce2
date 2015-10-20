@@ -6,12 +6,10 @@
 <label>Adresse :</label> <?= !empty($adresse) ? $adresse : 'Non renseignee' ?>
 <label>Ville :</label> <?= !empty($ville) ? $ville : 'Non renseignee' ?>
 <label>Pays :</label> <?= !empty($pays) ? $pays : 'Non renseigne' ?>
-
-
 <ul>
     <li><a href="/admin/profil-news-<?=$idMembre?>.html">Afficher les news du membre</a></li>
     <li><a href="/admin/profil-comments-<?=$idMembre?>.html">Afficher les commentaires du membre</a></li>
-    <?php if($user->getAttribute('groupe_user')==1 ||($user->getAttribute('groupe_user')==2 && $user->getAttribute('id_user')==$idMembre)) {?>
+    <?php if($user->getAttribute('groupe_user') < $groupeMembre || $user->getAttribute('id_user')==$idMembre) {?>
         <li><a href="/admin/profil-update-<?=$idMembre?>.html">Modifier les informations personnelles du membre</a></li>
         <li><a href="/admin/profil-update-login-<?=$idMembre?>.html">Modifier le login du membre</a></li>
         <li><a href="/admin/profil-update-password-<?=$idMembre?>.html">Modifier le mot de passe du membre</a></li>

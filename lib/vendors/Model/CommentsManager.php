@@ -72,4 +72,8 @@ abstract class CommentsManager extends Manager
   abstract public function getCommentGhostAuthor($ghostauthor);
 
   abstract public function countCommentGhostAuthor($ghostauthor);
+
+  abstract public function countComments($news);
+
+  abstract public function getListOfBefore($news_id,$comment_id_old);
 }

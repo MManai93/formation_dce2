@@ -33,7 +33,8 @@ class DeconnexionController extends BackController
         }
         else
         {
-            $this->app->httpResponse()->redirect404();
+            $this->app->user()->setFlash('Vous n\'êtes pas connecté!');
+            $this->app->httpResponse()->redirect('/');
         }
     }
 

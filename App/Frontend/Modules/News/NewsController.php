@@ -7,6 +7,9 @@ use \OCFram\HTTPRequest;
 use \Entity\Comment;
 use \FormBuilder\CommentFormBuilder;
 use \OCFram\FormHandler;
+
+//la methode run mettra le lien avec son texte et generara la page aveec addvar
+
  
 class NewsController extends BackController
 {
@@ -48,19 +51,13 @@ class NewsController extends BackController
     }
 
     $listTags=$newsManager->getTagsof($news->id());
-    /*$stringTags='';
-    if (is_array($listTags))
-    {
-      foreach ($listTags as $tag)
-      {
-        $stringTags .= '<a href="tag-".$tag[0]></a>'. '/';
-      }
-    }*/
-    $comments=$this->managers->getManagerOf('Comments')->getListOf($news->id());
+    $commentManager=$this->managers->getManagerOf('Comments');
+    $comments=$commentManager->getListOf($news->id(),0,5);
     $this->page->addVar('title', $news->title());
     $this->page->addVar('news', $news);
     $this->page->addVar('listTags',$listTags);
     $this->page->addVar('comments',$comments);
+    $this->page->addVar('display_button_show_more',$commentManager->countComments($news->id()) > count($comments));
   }
 
   public function executeInsertComment(HTTPRequest $request)
@@ -141,27 +138,16 @@ class NewsController extends BackController
     $this->page->addVar('countNews', count($listNews));
   }
 
-  public function executeGetNewComments(HTTPRequest $request)
+  public function executeGetComments(HTTPRequest $request)
   {
-    $listCommentAfterId=$this->managers->getManagerOf('Comments')->getListOfAfter($request->postData('news_id'),$request->postData('comment_id_last'));
-    exit(json_encode($listCommentAfterId));
-  }
-
-  public function executeGetOldComments(HTTPRequest $request)
-  {
-    $listCommentsofNews=$this->managers->getManagerOf('Comments')->getListOf($request->postData('news_id'));
-    $listCommentsBeforeIdComment=array();
-    $i=0;
-    foreach($listCommentsofNews as $comment)
+    if($request->postData('comment_id_last')!=null)
     {
-      if($comment->id() < $request->postData('comment_id_old'))
-      {
-        $listCommentsBeforeIdComment[$i]=$comment->toArray();
-        $i+=1;
-      }
+      $listComment=$this->managers->getManagerOf('Comments')->getListOfAfter($request->postData('news_id'),$request->postData('comment_id_last'));
     }
-    $listCommentsBeforeIdComment=json_encode($listCommentsBeforeIdComment, JSON_PRETTY_PRINT);
-    echo $listCommentsBeforeIdComment;
-    exit();
+    else if ($request->postExists('comment_id_old')!=null)
+    {
+      $listComment=$this->managers->getManagerOf('Comments')->getListOfBefore($request->postData('news_id'),$request->postData('comment_id_old'));
+    }
+    exit(json_encode($listComment));
   }
 }

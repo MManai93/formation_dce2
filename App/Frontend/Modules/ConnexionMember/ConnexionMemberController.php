@@ -10,6 +10,11 @@ class ConnexionMemberController extends BackController
     public function executeIndex(HTTPRequest $Request)
     {
         $this->page->addVar('title', 'Connexion Membre');
+        if($this->app->user()->isAuthenticated())
+        {
+            $this->app->user()->setFlash('Vous êtes déjà connecté !');
+            $this->app->httpResponse()->redirect('/');
+        }
 
         if ($Request->postExists('login'))
         {
