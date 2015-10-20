@@ -26,7 +26,7 @@
  
       <div id="content-wrap">
         <section id="main">
-          <?=$flash ?> <!-- a changer -->
+          <?=$flash ?>
  
           <?= $content ?>
         </section>

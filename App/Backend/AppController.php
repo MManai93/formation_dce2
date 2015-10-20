@@ -35,20 +35,20 @@ trait AppController
     public function menu()
     {
         $user=$this->app->user();
-        $this->listMenu[]=array('text'=>'Accueil', 'link' => '/');
+        $this->listMenu[]=array('text'=>'Accueil', 'link' => $this->app->router()->getURL('News','index'));
         if($user->isAuthenticated())
         {
-            $this->listMenu[]=array('text'=>'Afficher les news', 'link' =>'/admin/');//A CHANGER
-            $this->listMenu[]=array('text'=>'Membres', 'link' => '/admin/profil-list.html');//A CHANGER
-            $this->listMenu[]=array('text'=>'Ajouter une news', 'link' =>'/admin/news-insert.html');//A CHANGER
-            $this->listMenu[]=array('text'=>'Afficher mon profil', 'link' =>'/admin/profil-'.$user->getAttribute('id_user').'.html');//A CHANGER
-            $this->listMenu[]=array('text'=>'Déconnexion', 'link' =>'/admin/deconnexion.html');//A CHANGER
+            $this->listMenu[]=array('text'=>'Afficher les news', 'link' => $this->app->router()->getURL('News','index'));//A CHANGER
+            $this->listMenu[]=array('text'=>'Membres', 'link' =>  $this->app->router()->getURL('Member','show'));//A CHANGER
+            $this->listMenu[]=array('text'=>'Ajouter une news', 'link' => $this->app->router()->getURL('News','insert'));//A CHANGER
+            $this->listMenu[]=array('text'=>'Afficher mon profil', 'link' => $this->app->router()->getURL('Member','index',['id'=>$user->getAttribute('id_user')]));//A CHANGER
+            $this->listMenu[]=array('text'=>'Déconnexion', 'link' => $this->app->router()->getURL('Deconnexion','index'));//A CHANGER
 
         }
         else
         {
-            $this->listMenu[]=array('text'=>'Inscription', 'link'=>'/inscription.html');//A CHANGER
-            $this->listMenu[]=array('text'=>'Connexion', 'link'=>'/connexion.html');//A CHANGER
+            $this->listMenu[]=array('text'=>'Inscription', 'link'=> $this->app->router()->getURL('Registration','index'));//A CHANGER
+            $this->listMenu[]=array('text'=>'Connexion', 'link'=> $this->app->router()->getURL('Connexion','index'));//A CHANGER
         }
         $this->page->addVar('Menu',$this->listMenu);
     }

@@ -4,7 +4,7 @@ namespace OCFram;
 class Router
 {
   /** @var Route[] $routes */
-  protected $routes = [];
+  public $routes = [];
  
   const NO_ROUTE = 1;
 
@@ -62,7 +62,7 @@ class Router
    * @param $module
    * @param $action
    * @param array|null $varsNamesValues
-   * @return string|void
+   * @return mixed
    */
   public function getURL($module,$action,array $varsNamesValues=null)
   {
@@ -80,7 +80,7 @@ class Router
           {
             throw new \RuntimeException('Erreur : nom variable non correct pour la varName : '.$name.'!');
           }
-          $url = preg_replace(array('([0-9]+)\\','([a-z]+)\\'),$varsNamesValues[$name],$url,1);//a modif
+          $url = preg_replace('/\(.*\)/',$varsNamesValues[$name],$url,1);//a modif avec preg_replace('/\(.*\)/', $var, $routebuilt,1)
           unset($varsNamesValues[$name]);
         }
       }

@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Frontend;
-use OCFram\Route;
-use \OCFram\Router;
+
+use OCFram\Router;
 
 trait AppController
 {
@@ -44,7 +44,6 @@ trait AppController
             $this->listMenu[]=array('text'=>'Ajouter une news', 'link' =>'/admin/news-insert.html');
             $this->listMenu[]=array('text'=>'Afficher mon profil', 'link' =>'/admin/profil-'.$user->getAttribute('id_user').'.html');
             $this->listMenu[]=array('text'=>'Déconnexion', 'link' =>'/admin/deconnexion.html');
-
         }
         else
         {
