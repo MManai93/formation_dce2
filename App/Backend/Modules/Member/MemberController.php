@@ -51,7 +51,6 @@ class MemberController extends BackController
                             $this->app->httpResponse()->redirect('/profil-'.$Member->id().'.html');//A CHANGER
                         }
                     }
-
                 }
                 else
                 {

@@ -43,7 +43,7 @@ class NewsManagerPDO extends NewsManager
 
     public function getList($debut = -1, $limite = -1)
     {
-        $sql = 'SELECT NAC_id as id, NAC_fk_NMC as member_id, NMC_login as member_login, NAC_title as title, NAC_content as content, NAC_dateadd as dateAdd ,NAC_datemodif as dateModif FROM t_new_articlec INNER JOIN t_new_memberc ON NAC_fk_NMC=NMC_id ORDER BY NAC_id DESC';
+        $sql = 'SELECT NAC_id as id, NAC_fk_NMC as member_id, NMC_login as member_login, NAC_title as title, NAC_content as content, NAC_dateadd as dateAdd ,NAC_datemodif as dateModif FROM t_new_articlec LEFT OUTER JOIN t_new_memberc ON NAC_fk_NMC=NMC_id ORDER BY NAC_id DESC';
 
         if ($debut != -1 || $limite != -1) {
             $sql .= ' LIMIT ' . (int)$limite . ' OFFSET ' . (int)$debut;
@@ -128,7 +128,7 @@ class NewsManagerPDO extends NewsManager
                                       FROM t_new_keywordd
                                       INNER JOIN t_new_articlec ON NAC_id=NKD_fk_NAC
                                       INNER JOIN t_new_keywordc ON NKD_fk_NKC=NKC_id
-                                      INNER JOIN t_new_memberc ON NAC_fk_NMC=NMC_id
+                                      LEFT OUTER JOIN t_new_memberc ON NAC_fk_NMC=NMC_id
                                       WHERE NKC_word=:word');
         $requete->bindValue(':word',$tags);
         $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\News');

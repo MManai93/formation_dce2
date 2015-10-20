@@ -51,7 +51,7 @@ class MemberFormBuilder extends FormBuilder
                     new MaxLengthValidator('L\'adresse spécifiée est trop longue (100 caractères maximum)', 100),
                 ],
             ]))
-            ->add(new StringField([ // barre deroulante ??
+            ->add(new StringField([
                 'label' => $admin ? 'Ville' : 'Votre ville',
                 'name' => 'city',
                 'validators' => [

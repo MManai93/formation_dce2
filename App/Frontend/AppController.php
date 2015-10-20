@@ -1,23 +1,23 @@
 <?php
 
 namespace App\Frontend;
+use OCFram\Route;
+use \OCFram\Router;
 
 trait AppController
 {
     protected $listMenu;
     protected $entete;
+    protected $flash='';
 
     public function flash()
     {
         $user=$this->app->user();
         if ($user->hasFlash())
         {
-            $this->page->addVar('flash', '<p style="text-align: center;">'. $user->getFlash().'</p>');
+            $this->flash='<p style="text-align: center;">'. $user->getFlash().'</p>';
         }
-        else
-        {
-            $this->page->addVar('flash', '');
-        }
+        $this->page->addVar('flash',$this->flash);
     }
     public function entete()
     {

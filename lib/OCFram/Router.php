@@ -15,7 +15,7 @@ class Router
   {
     if (!in_array($route, $this->routes))
     {
-      $this->routes[$route->module().$route->action()] = $route;
+      $this->routes[$route->module().'.'.$route->action()] = $route;
     }
   }
 
@@ -64,28 +64,29 @@ class Router
    * @param array|null $varsNamesValues
    * @return string|void
    */
-  public function getUrl($module,$action,array $varsNamesValues=null)
+  public function getURL($module,$action,array $varsNamesValues=null)
   {
-      $route=$this->routes[$module.$action];
-      if (empty($route))
+      if (!isset($this->routes[$module.'.'.$action]))
       {
         throw new \RuntimeException('Aucune route ne correspond au module et à l\'action passés en paramètres', self::NO_ROUTE);
       }
-      if($varsNamesValues==null)
+      $Route = $this->routes[$module.'.'.$action];
+      $url = $Route->url();
+      if ($Route->hasVars())
       {
-        return $route->url();
-      }
-      else
-      {
-        foreach($route->varsNames() as $name)
+        foreach($Route->varsNames() as $name)
         {
-          if(!array_key_exists($name,$varsNamesValues))
+          if(empty($varsNamesValues[$name]))
           {
-            throw new \RuntimeException('Erreur : nom variable non correct!');
+            throw new \RuntimeException('Erreur : nom variable non correct pour la varName : '.$name.'!');
           }
-          $url=str_replace(array('([0-9]+)\\','([a-z]+)\\'),$varsNamesValues[$name],$route->url(),1);
+          $url = preg_replace(array('([0-9]+)\\','([a-z]+)\\'),$varsNamesValues[$name],$url,1);//a modif
+          unset($varsNamesValues[$name]);
         }
-        return $url;
       }
+      if (sizeof($varsNamesValues) > 0)
+        throw new \RuntimeException('Erreur : Trop de variables passées à getURL !');
+      return $url;
+
   }
 }
