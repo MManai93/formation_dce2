@@ -7,7 +7,7 @@ use \OCFram\HTTPRequest;
 use \Entity\Member;
 use \FormBuilder\RegistrationFormBuilder;
 use \OCFram\FormHandler;
-use \OCFram\Router;
+
 
 class RegistrationController extends BackController
 {

@@ -48,7 +48,7 @@ foreach ($comments as $comment)
 ?>
 
 <p><a href="commenter-<?= $news->id() ?>.html">Ajouter un commentaire</a></p>
-<div id="data" data-news_id="<?=$news->id()?>" data-groupe_user="<?=$user->getAttribute('groupe_user')?>" data-id_user="<?=$user->getAttribute('id_user')?>"></div>
+<div class="data" data-news_id="<?=$news->id()?>" data-groupe_user="<?=$user->getAttribute('groupe_user')?>" data-id_user="<?=$user->getAttribute('id_user')?>"></div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
 <script type="text/javascript" src="loadComments.js"></script>
 <button id="show_new" onclick="loadComments(this.id)">Nouveaux commentaires</button>

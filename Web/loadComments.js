@@ -15,14 +15,13 @@ function getNewsId()
 
 function loadComments(eleId)
 {
-    var elt_data=$('#data');
-    var news=elt_data.data('news_id');
+    var elt_data=$(".data");
+    var news=elt_data.data("news_id");
     var comment_id_last=null;//serront séttés correctement avec loadNewComments et loadMoreComments
     var comment_id_old=null;
     var affichagedate;
     var RightToModify;
     var elt_balise;
-    console.log($('#show_new').data("news_id"));
     if(eleId=='show_new')
     {
         if ($('.comment:last').attr('comment-id') !=null)
@@ -36,6 +35,7 @@ function loadComments(eleId)
     }
     console.log(comment_id_last);
     console.log(comment_id_old);
+    console.log(news);
     jQuery.post("getComments.html", {news_id: news, comment_id_last: comment_id_last, comment_id_old: comment_id_old},function(data){
         console.log(data);
         $.each(data,function(key,value) {

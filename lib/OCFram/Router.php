@@ -68,7 +68,7 @@ class Router
   {
       if (!isset($this->routes[$module.'.'.$action]))
       {
-        throw new \RuntimeException('Aucune route ne correspond au module et à l\'action passés en paramètres', self::NO_ROUTE);
+        throw new \RuntimeException('Aucune route ne correspond au module '.$module.' et a l\'action '.$action.' passes en parametres', self::NO_ROUTE);
       }
       $Route = $this->routes[$module.'.'.$action];
       $url = $Route->url();
@@ -86,7 +86,6 @@ class Router
       }
       if (sizeof($varsNamesValues) > 0)
         throw new \RuntimeException('Erreur : Trop de variables passées à getURL !');
-      return $url;
-
+      return str_replace('\.html','.html',$url);
   }
 }

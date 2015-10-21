@@ -8,6 +8,7 @@ abstract class Application
   protected $name;
   protected $user;
   protected $config;
+  protected $router;
  
   public function __construct()
   {
@@ -15,17 +16,17 @@ abstract class Application
     $this->httpResponse = new HTTPResponse($this);
     $this->user = new User($this);
     $this->config = new Config($this);
+    $this->router=new Router($this);
  
     $this->name = '';
   }
  
   public function getController()
   {
-    $router = new Router;
- 
+    var_dump($this->name);
     $xml = new \DOMDocument;
     $xml->load(__DIR__.'/../../App/'.$this->name.'/Config/routes.xml');
- 
+
     $routes = $xml->getElementsByTagName('route');
  
     // On parcourt les routes du fichier XML.
@@ -40,13 +41,13 @@ abstract class Application
       }
  
       // On ajoute la route au routeur.
-      $router->addRoute(new Route($route->getAttribute('url'), $route->getAttribute('module'), $route->getAttribute('action'), $vars));
+      $this->router->addRoute(new Route($route->getAttribute('url'), $route->getAttribute('module'), $route->getAttribute('action'), $vars));
     }
  
     try
     {
       // On récupère la route correspondante à l'URL.
-      $matchedRoute = $router->getRoute($this->httpRequest->requestURI());
+      $matchedRoute = $this->router->getRoute($this->httpRequest->requestURI());
     }
     catch (\RuntimeException $e)
     {
@@ -90,5 +91,10 @@ abstract class Application
   public function user()
   {
     return $this->user;
+  }
+
+  public function router()
+  {
+    return $this->router;
   }
 }
